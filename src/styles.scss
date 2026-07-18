@@ -13,7 +13,6 @@ html {
 }
 
 body {
-  min-width: 320px;
   margin: 0;
   overflow-x: hidden;
   background: var(--color-background);
@@ -64,9 +63,13 @@ button {
 }
 
 a:focus-visible,
-button:focus-visible {
-  outline: 3px solid var(--color-silver-light);
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid white;
   outline-offset: 4px;
+  box-shadow: 0 0 0 7px #641347;
 }
 
 .container {
@@ -173,6 +176,11 @@ button:focus-visible {
   transform: skewX(-18deg) translate3d(430%, 0, 0);
 }
 
+.button:active:not(:disabled) {
+  transform: scale(0.985);
+  transition-duration: 80ms;
+}
+
 @media (hover: hover) and (pointer: fine) {
   .button:hover:not(:disabled) {
     transform: translateY(-2px);
@@ -193,11 +201,6 @@ button:focus-visible {
     border-color: rgb(255 255 255 / 68%);
     background: rgb(255 255 255 / 10%);
     box-shadow: 0 12px 32px rgb(10 4 12 / 16%);
-  }
-
-  .button:active:not(:disabled) {
-    transform: translateY(0) scale(0.985);
-    transition-duration: 80ms;
   }
 }
 
@@ -280,8 +283,9 @@ app-hero .hero::before {
   content: '';
   inset: -12%;
   background:
-    radial-gradient(circle at 68% 30%, rgb(217 25 201 / 13%), transparent 28%),
-    radial-gradient(circle at 28% 78%, rgb(225 92 50 / 10%), transparent 32%);
+    radial-gradient(circle at 68% 30%, rgb(217 25 201 / 18%), transparent 28%),
+    radial-gradient(circle at 28% 78%, rgb(225 92 50 / 14%), transparent 32%),
+    radial-gradient(circle at 48% 48%, rgb(255 255 255 / 5%), transparent 18%);
   transform: scale(1.02) translate3d(-1%, 0, 0);
   animation: hero-background-drift 24s ease-in-out infinite alternate;
 }
@@ -346,17 +350,31 @@ app-hero .hero-copy > :nth-child(5) {
   }
 }
 
-@keyframes spark-drift {
-  to {
-    translate: 3px -8px;
-    opacity: 0.7;
-  }
+app-experience-gallery .gallery::after {
+  position: absolute;
+  z-index: 0;
+  top: 18%;
+  left: -10rem;
+  width: 24rem;
+  aspect-ratio: 1;
+  pointer-events: none;
+  content: '';
+  border: 1px solid color-mix(in srgb, var(--color-pink) 16%, transparent);
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 5rem color-mix(in srgb, var(--color-pink) 3%, transparent),
+    0 0 0 10rem color-mix(in srgb, var(--color-orange-bright) 2%, transparent);
+  opacity: 0.72;
+  transform: translate3d(0, 0, 0) scale(1);
 }
 
 app-testimonials-carousel .reviews::before {
   pointer-events: none;
+  border-color: rgb(255 255 255 / 13%);
+  box-shadow:
+    0 0 0 5rem rgb(217 25 201 / 3%),
+    0 0 0 10rem rgb(255 129 79 / 2%);
   transform: translate3d(0, 0, 0);
-  animation: reviews-orbit var(--duration-ambient-slow) var(--ease-standard) infinite alternate;
 }
 
 app-testimonials-carousel .reviews::after {
@@ -369,8 +387,15 @@ app-testimonials-carousel .reviews::after {
   bottom: -18rem;
   border: 1px solid rgb(255 255 255 / 6%);
   border-radius: 50%;
-  box-shadow: 0 0 0 6rem rgb(225 92 50 / 2%);
-  opacity: 0.7;
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--color-orange-bright) 16%, transparent),
+    transparent 66%
+  );
+  box-shadow:
+    0 0 0 6rem rgb(225 92 50 / 3%),
+    0 0 0 11rem rgb(217 25 201 / 2%);
+  opacity: 0.88;
   transform: translate3d(0, 0, 0) scale(1);
   animation: reviews-glow var(--duration-ambient) var(--ease-standard) infinite alternate;
 }
@@ -388,18 +413,15 @@ app-testimonials-carousel :is(.carousel-button, .autoplay-button, .carousel-indi
     border-color var(--duration-normal) var(--ease-standard);
 }
 
-@keyframes reviews-orbit {
-  to {
-    opacity: 0.7;
-    transform: translate3d(var(--ambient-shift), calc(var(--ambient-shift) * 0.55), 0) rotate(5deg);
-  }
-}
-
 @keyframes reviews-glow {
   to {
     opacity: 1;
-    transform: translate3d(calc(var(--ambient-shift) * -0.65), calc(var(--ambient-shift) * -0.5), 0)
-      scale(1.05);
+    transform: translate3d(
+        calc(var(--ambient-shift-large) * -0.75),
+        calc(var(--ambient-shift) * -1),
+        0
+      )
+      scale(1.08);
   }
 }
 

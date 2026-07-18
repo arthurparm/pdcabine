@@ -33,6 +33,8 @@ describe('TestimonialsCarouselComponent', () => {
     fixture.componentRef.setInput('rating', '5,0');
     fixture.componentRef.setInput('reviewCount', 246);
     fixture.componentRef.setInput('recommendationRate', '100%');
+    fixture.componentRef.setInput('sourceLabel', 'Casamentos.com.br');
+    fixture.componentRef.setInput('sourceUrl', 'https://example.com/avaliacoes');
     fixture.detectChanges();
     await fixture.whenStable();
     element = fixture.nativeElement as HTMLElement;
@@ -164,6 +166,8 @@ describe('TestimonialsCarouselComponent', () => {
     fixture.componentRef.setInput('rating', '5,0');
     fixture.componentRef.setInput('reviewCount', 246);
     fixture.componentRef.setInput('recommendationRate', '100%');
+    fixture.componentRef.setInput('sourceLabel', 'Casamentos.com.br');
+    fixture.componentRef.setInput('sourceUrl', 'https://example.com/avaliacoes');
     fixture.detectChanges();
     await fixture.whenStable();
     element = fixture.nativeElement as HTMLElement;
@@ -185,5 +189,44 @@ describe('TestimonialsCarouselComponent', () => {
     );
     expect(sourceLink?.target).toBe('_blank');
     expect(sourceLink?.rel).toBe('noopener noreferrer');
+    expect(sourceLink?.href).toBe('https://example.com/avaliacoes');
+    expect(controls().next.getAttribute('aria-controls')).toBe('reviews-track');
+    expect(controls().next.querySelector('svg')).not.toBeNull();
+    expect(controls().autoplay.querySelector('svg')).not.toBeNull();
+  });
+
+  it('suspends autoplay during hover and focus, then resumes it', async () => {
+    mockMatchMedia();
+    const intervalSpy = vi.spyOn(window, 'setInterval').mockReturnValue(42);
+    const clearSpy = vi.spyOn(window, 'clearInterval');
+    fixture = TestBed.createComponent(TestimonialsCarouselComponent);
+    fixture.componentRef.setInput('rating', '5,0');
+    fixture.componentRef.setInput('reviewCount', 246);
+    fixture.componentRef.setInput('recommendationRate', '100%');
+    fixture.componentRef.setInput('sourceLabel', 'Casamentos.com.br');
+    fixture.componentRef.setInput('sourceUrl', 'https://example.com/avaliacoes');
+    fixture.detectChanges();
+    await fixture.whenStable();
+    element = fixture.nativeElement as HTMLElement;
+    const region = element.querySelector('.reviews')!;
+
+    expect(intervalSpy.mock.calls.some((call) => call[1] === 6500)).toBe(true);
+    region.dispatchEvent(new MouseEvent('mouseenter'));
+    fixture.detectChanges();
+    await fixture.whenStable();
+    expect(clearSpy).toHaveBeenCalledWith(42);
+
+    region.dispatchEvent(new MouseEvent('mouseleave'));
+    fixture.detectChanges();
+    await fixture.whenStable();
+    const intervalsAfterHover = intervalSpy.mock.calls.length;
+    region.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
+    fixture.detectChanges();
+    await fixture.whenStable();
+    region.dispatchEvent(new FocusEvent('focusout', { bubbles: true }));
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    expect(intervalSpy.mock.calls.length).toBeGreaterThan(intervalsAfterHover);
   });
 });

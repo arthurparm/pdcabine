@@ -1,5 +1,5 @@
 import { DOCUMENT } from '@angular/common';
-import { Component, OnDestroy, effect, inject, input, signal } from '@angular/core';
+import { Component, ElementRef, OnDestroy, effect, inject, input, signal } from '@angular/core';
 import {
   FormBuilder,
   ReactiveFormsModule,
@@ -95,23 +95,25 @@ Envio realizado pelo site da PD Cabine.`;
 })
 export class ContactSectionComponent implements OnDestroy {
   private readonly document = inject(DOCUMENT);
+  private readonly host: ElementRef<HTMLElement> = inject(ElementRef);
   private readonly formBuilder = inject(FormBuilder);
   private readonly conversionTracker = inject(ConversionTrackerService);
   private processingTimer: ReturnType<typeof setTimeout> | undefined;
   private pendingPopup: WindowProxy | null = null;
 
-  readonly companyName = input.required<string>();
   readonly whatsappNumber = input.required<string>();
   readonly contactConfig = input.required<SiteConfig['contact']>();
-  readonly selectedServiceId = input<ServiceId | ''>('');
+  readonly selectedService = input<{
+    readonly id: ServiceId;
+    readonly requestId: number;
+  } | null>(null);
 
   protected readonly submitted = signal(false);
   protected readonly processing = signal(false);
   protected readonly success = signal(false);
   protected readonly fallbackUrl = signal<string | null>(null);
-  protected readonly normalizedPhone = signal('');
 
-  protected readonly budgetForm = this.formBuilder.nonNullable.group({
+  readonly budgetForm = this.formBuilder.nonNullable.group({
     name: ['', [Validators.required, trimmedMinLength(3)]],
     phone: ['', [Validators.required, validPhone]],
     email: ['', Validators.email],
@@ -130,9 +132,9 @@ export class ContactSectionComponent implements OnDestroy {
         Validators.maxLength(this.contactConfig().messageMaxLength),
       );
       this.budgetForm.controls.message.updateValueAndValidity({ emitEvent: false });
-      const selectedId = this.selectedServiceId();
-      if (!selectedId) return;
-      const mappedIds = this.contactConfig().serviceSelectionMap[selectedId];
+      const selection = this.selectedService();
+      if (!selection) return;
+      const mappedIds = this.contactConfig().serviceSelectionMap[selection.id];
       this.budgetForm.controls.serviceIds.setValue(mappedIds);
       this.budgetForm.controls.serviceIds.markAsTouched();
     });
@@ -151,7 +153,6 @@ export class ContactSectionComponent implements OnDestroy {
     const inputElement = event.target as HTMLInputElement;
     const normalized = normalizePhone(inputElement.value);
     const formatted = formatPhone(normalized);
-    this.normalizedPhone.set(normalized);
     this.budgetForm.controls.phone.setValue(formatted, { emitEvent: false });
     inputElement.value = formatted;
   }
@@ -173,6 +174,10 @@ export class ContactSectionComponent implements OnDestroy {
     this.budgetForm.controls.serviceIds.markAsTouched();
   }
 
+  protected onServiceToggle(serviceId: string, event: Event): void {
+    this.toggleService(serviceId, (event.currentTarget as HTMLInputElement).checked);
+  }
+
   protected isServiceSelected(serviceId: string): boolean {
     return this.budgetForm.controls.serviceIds.value.includes(serviceId);
   }
@@ -188,6 +193,11 @@ export class ContactSectionComponent implements OnDestroy {
 
     if (this.budgetForm.invalid) {
       this.budgetForm.markAllAsTouched();
+      this.document.defaultView?.setTimeout(() => {
+        this.host.nativeElement
+          .querySelector<HTMLElement>('[aria-invalid="true"]')
+          ?.focus({ preventScroll: false });
+      });
       return;
     }
 

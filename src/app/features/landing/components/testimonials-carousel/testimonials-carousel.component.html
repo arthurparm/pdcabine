@@ -48,6 +48,7 @@
       (lostpointercapture)="cancelPointer()"
     >
       <div
+        id="reviews-track"
         class="carousel-track"
         [style.--visible-count]="visibleCount()"
         [style.transform]="trackTransform()"
@@ -69,13 +70,14 @@
                 <p>{{ review.context }}</p>
               </div>
             </div>
-            <p class="stars" [attr.aria-label]="review.rating + ' de 5 estrelas'">
+            <p class="stars">
+              <span class="sr-only">{{ review.rating }} de 5 estrelas</span>
               <span aria-hidden="true">★★★★★</span>
             </p>
             <blockquote>{{ review.summary }}</blockquote>
             <p class="review-source">
               <span class="source-mark" aria-hidden="true">C</span>
-              Resumo de avaliação pública — Casamentos.com.br
+              Resumo de avaliação pública — {{ sourceLabel() }}
             </p>
           </article>
         }
@@ -88,10 +90,23 @@
           type="button"
           class="carousel-button"
           aria-label="Mostrar avaliações anteriores"
+          aria-controls="reviews-track"
           [disabled]="currentPage() === 0"
           (click)="previous()"
         >
-          <span aria-hidden="true">←</span>
+          <svg
+            aria-hidden="true"
+            width="18"
+            height="18"
+            viewBox="0 0 18 18"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="m11 4-5 5 5 5" />
+          </svg>
         </button>
         <div class="carousel-indicators" aria-label="Páginas de avaliações">
           @for (start of pageStarts(); track start; let page = $index) {
@@ -100,6 +115,7 @@
               [class.is-active]="page === currentPage()"
               [attr.aria-current]="page === currentPage() ? 'true' : null"
               [attr.aria-label]="indicatorLabel(page)"
+              aria-controls="reviews-track"
               (click)="goToPage(page)"
             ></button>
           }
@@ -108,10 +124,23 @@
           type="button"
           class="carousel-button"
           aria-label="Mostrar próximas avaliações"
+          aria-controls="reviews-track"
           [disabled]="currentPage() === pageStarts().length - 1"
           (click)="next()"
         >
-          <span aria-hidden="true">→</span>
+          <svg
+            aria-hidden="true"
+            width="18"
+            height="18"
+            viewBox="0 0 18 18"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="m7 4 5 5-5 5" />
+          </svg>
         </button>
         <button
           type="button"
@@ -120,19 +149,21 @@
             isUserPaused() ? 'Retomar rotação automática' : 'Pausar rotação automática'
           "
           [attr.aria-pressed]="isUserPaused()"
+          aria-controls="reviews-track"
           (click)="toggleAutoplay()"
         >
-          <span aria-hidden="true">{{ isUserPaused() ? '▶' : 'Ⅱ' }}</span>
+          <svg aria-hidden="true" width="14" height="14" viewBox="0 0 14 14" fill="currentColor">
+            @if (isUserPaused()) {
+              <path d="M3 1.8v10.4L12 7 3 1.8Z" />
+            } @else {
+              <path d="M2.5 2h3v10h-3V2Zm6 0h3v10h-3V2Z" />
+            }
+          </svg>
           {{ isUserPaused() ? 'Retomar' : 'Pausar' }}
         </button>
       </div>
 
-      <a
-        class="reviews-link"
-        href="https://www.casamentos.com.br/cabine-de-fotos/pd-cabine--e269740"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
+      <a class="reviews-link" [href]="sourceUrl()" target="_blank" rel="noopener noreferrer">
         Ver todas as avaliações <span aria-hidden="true">↗</span>
       </a>
     </div>

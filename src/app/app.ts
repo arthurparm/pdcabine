@@ -5,6 +5,6 @@ import { LandingPageComponent } from './features/landing/landing-page.component'
   selector: 'app-root',
   imports: [LandingPageComponent],
   template: '<app-landing-page />',
-  styleUrl: './app.scss'
+  styleUrl: './app.scss',
 })
 export class App {}

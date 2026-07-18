@@ -19,6 +19,7 @@ import type { NavigationItem } from '../../../../core/models/navigation-item.mod
 })
 export class HeaderComponent implements AfterViewInit, OnDestroy {
   private readonly document = inject(DOCUMENT);
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
   private sectionObserver?: IntersectionObserver;
   private scrollStateObserver?: IntersectionObserver;
 
@@ -73,9 +74,22 @@ export class HeaderComponent implements AfterViewInit, OnDestroy {
     if (id) this.activeSection.set(id);
   }
 
-  @HostListener('document:keydown.escape')
-  protected onEscape(): void {
-    if (this.menuOpen()) this.closeMenu(true);
+  @HostListener('document:keydown', ['$event'])
+  protected onDocumentKeydown(event: KeyboardEvent): void {
+    if (!this.menuOpen()) return;
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      this.closeMenu(true);
+    } else if (event.key === 'Tab') {
+      this.trapMenuFocus(event);
+    }
+  }
+
+  @HostListener('window:resize')
+  protected closeMobileMenuOnDesktop(): void {
+    if ((this.document.defaultView?.innerWidth ?? 0) > 900 && this.menuOpen()) {
+      this.closeMenu();
+    }
   }
 
   protected toggleMenu(): void {
@@ -88,5 +102,46 @@ export class HeaderComponent implements AfterViewInit, OnDestroy {
     this.menuOpen.set(false);
     this.document.body.classList.remove('menu-open');
     if (restoreFocus) this.menuButton?.nativeElement.focus();
+  }
+
+  protected followNavigation(sectionId: string): void {
+    const shouldMoveFocus = this.menuOpen();
+    this.closeMenu();
+    if (!shouldMoveFocus) return;
+
+    this.document.defaultView?.setTimeout(() => {
+      const section = this.document.getElementById(sectionId);
+      if (!section) return;
+      const alreadyFocusable = section.hasAttribute('tabindex');
+      if (!alreadyFocusable) section.setAttribute('tabindex', '-1');
+      section.focus({ preventScroll: true });
+      if (!alreadyFocusable) {
+        section.addEventListener('blur', () => section.removeAttribute('tabindex'), { once: true });
+      }
+    });
+  }
+
+  private trapMenuFocus(event: KeyboardEvent): void {
+    const view = this.document.defaultView;
+    if (!view) return;
+    const focusable = [
+      ...this.host.nativeElement.querySelectorAll<HTMLElement>(
+        '.menu-button, #primary-navigation a',
+      ),
+    ].filter((element) => {
+      const style = view.getComputedStyle(element);
+      return style.display !== 'none' && style.visibility !== 'hidden';
+    });
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (!first || !last) return;
+
+    if (event.shiftKey && this.document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && this.document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
   }
 }

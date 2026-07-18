@@ -11,6 +11,7 @@
       [revealDelay]="100"
       [formGroup]="budgetForm"
       (ngSubmit)="submitBudget()"
+      [attr.aria-busy]="processing()"
       novalidate
     >
       <div class="field-row">
@@ -21,6 +22,7 @@
             type="text"
             formControlName="name"
             autocomplete="name"
+            required
             maxlength="120"
             (blur)="trimField('name')"
             [attr.aria-invalid]="showError(budgetForm.controls.name)"
@@ -42,6 +44,7 @@
             type="tel"
             formControlName="phone"
             autocomplete="tel"
+            required
             inputmode="tel"
             maxlength="15"
             placeholder="(11) 99999-9999"
@@ -89,6 +92,7 @@
             type="date"
             formControlName="eventDate"
             autocomplete="off"
+            required
             [attr.aria-invalid]="showError(budgetForm.controls.eventDate)"
             [attr.aria-describedby]="
               showError(budgetForm.controls.eventDate) ? 'event-date-error' : null
@@ -109,6 +113,7 @@
             id="event-type"
             formControlName="eventType"
             autocomplete="off"
+            required
             [attr.aria-invalid]="showError(budgetForm.controls.eventType)"
             [attr.aria-describedby]="
               showError(budgetForm.controls.eventType) ? 'event-type-error' : null
@@ -133,6 +138,7 @@
             type="text"
             formControlName="region"
             autocomplete="address-level2"
+            required
             maxlength="120"
             (blur)="trimField('region')"
             [attr.aria-invalid]="showError(budgetForm.controls.region)"
@@ -183,7 +189,7 @@
               <input
                 type="checkbox"
                 [checked]="isServiceSelected(service.id)"
-                (change)="toggleService(service.id, $any($event.target).checked)"
+                (change)="onServiceToggle(service.id, $event)"
               />
               <span>{{ service.label }}</span>
             </label>
@@ -228,6 +234,7 @@
           <input
             type="checkbox"
             formControlName="consent"
+            required
             [attr.aria-invalid]="showError(budgetForm.controls.consent)"
             [attr.aria-describedby]="
               showError(budgetForm.controls.consent) ? 'consent-error' : 'privacy-notice'
@@ -247,7 +254,7 @@
 
       <p id="privacy-notice" class="privacy-note">{{ contactConfig().privacyNotice }}</p>
 
-      <button class="button button--light submit-button" type="submit" [disabled]="processing()">
+      <button class="button submit-button" type="submit" [disabled]="processing()">
         @if (processing()) {
           <span class="submit-spinner" aria-hidden="true"></span>
           Preparando sua solicitação…

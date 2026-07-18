@@ -29,6 +29,8 @@ export class TestimonialsCarouselComponent implements AfterViewInit, OnDestroy {
   readonly rating = input.required<string>();
   readonly reviewCount = input.required<number>();
   readonly recommendationRate = input.required<string>();
+  readonly sourceLabel = input.required<string>();
+  readonly sourceUrl = input.required<string>();
 
   protected readonly reviews = PUBLIC_REVIEWS;
   protected readonly activeIndex = signal(0);

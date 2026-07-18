@@ -20,7 +20,11 @@
           >
             <div class="service-card__media">
               <picture>
-                <source [srcset]="image.webpSrc" type="image/webp" />
+                <source
+                  [srcset]="image.cardWebpSrcSet ?? image.webpSrcSet"
+                  sizes="(max-width: 580px) calc(100vw - 2rem), (max-width: 1100px) calc((100vw - 4rem) / 2), (max-width: 1320px) calc((100vw - 6rem) / 3), 397px"
+                  type="image/webp"
+                />
                 <img
                   [src]="image.jpegSrc"
                   [alt]="image.alt"

@@ -11,28 +11,40 @@
 
 .social-proof::before {
   position: absolute;
-  z-index: -1;
+  z-index: 0;
   pointer-events: none;
   content: '';
   inset: -100% -12%;
   background:
-    radial-gradient(circle at 24% 45%, rgb(217 25 201 / 10%), transparent 22%),
-    radial-gradient(circle at 76% 55%, rgb(225 92 50 / 9%), transparent 22%);
-  opacity: 0.65;
+    radial-gradient(circle at 24% 45%, rgb(217 25 201 / 16%), transparent 22%),
+    radial-gradient(circle at 76% 55%, rgb(225 92 50 / 14%), transparent 22%);
+  opacity: 0.78;
   transform: translate3d(calc(var(--ambient-shift) * -0.4), 0, 0);
-  animation: proof-ambient var(--duration-ambient-slow) var(--ease-standard) infinite alternate;
+}
+
+.social-proof::after {
+  position: absolute;
+  z-index: 0;
+  top: -75%;
+  bottom: -75%;
+  left: -28%;
+  width: 28%;
+  pointer-events: none;
+  content: '';
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--color-magenta) 8%, transparent),
+    color-mix(in srgb, var(--color-orange-bright) 7%, transparent),
+    transparent
+  );
+  opacity: 0.72;
+  transform: skewX(-16deg) translate3d(0, 0, 0);
 }
 
 .proof-panel {
   position: relative;
   z-index: 1;
-}
-
-@keyframes proof-ambient {
-  to {
-    opacity: 0.9;
-    transform: translate3d(var(--ambient-shift), 0, 0);
-  }
 }
 
 .metrics {
@@ -83,7 +95,8 @@
 }
 
 @media (max-width: 800px) {
-  .social-proof::before {
+  .social-proof::before,
+  .social-proof::after {
     animation: none;
     transform: none;
   }
@@ -105,7 +118,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .social-proof::before {
+  .social-proof::before,
+  .social-proof::after {
     animation: none;
     transform: none;
   }

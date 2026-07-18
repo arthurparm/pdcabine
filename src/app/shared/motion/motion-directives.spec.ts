@@ -23,6 +23,7 @@ describe('motion directives', () => {
   afterEach(() => {
     fixture?.destroy();
     vi.restoreAllMocks();
+    vi.unstubAllGlobals();
   });
 
   it('keeps reveal content visible when IntersectionObserver is unavailable', () => {
@@ -32,6 +33,39 @@ describe('motion directives', () => {
     expect(fixture.nativeElement.querySelector('.reveal-target').classList).toContain(
       'is-revealed',
     );
+  });
+
+  it('reveals an observed element only once and stops observing it', () => {
+    mockMatchMedia(false);
+    let observerCallback: IntersectionObserverCallback | undefined;
+    const observe = vi.fn();
+    const unobserve = vi.fn();
+    vi.stubGlobal(
+      'IntersectionObserver',
+      class {
+        constructor(callback: IntersectionObserverCallback) {
+          observerCallback = callback;
+        }
+        observe = observe;
+        unobserve = unobserve;
+        disconnect = vi.fn();
+      },
+    );
+
+    fixture = TestBed.createComponent(MotionHostComponent);
+    fixture.detectChanges();
+    const target = fixture.nativeElement.querySelector('.reveal-target') as HTMLElement;
+    expect(target.classList).not.toContain('is-revealed');
+    expect(observe).toHaveBeenCalledWith(target);
+
+    observerCallback?.(
+      [{ isIntersecting: true, target } as unknown as IntersectionObserverEntry],
+      {} as IntersectionObserver,
+    );
+    fixture.detectChanges();
+
+    expect(target.classList).toContain('is-revealed');
+    expect(unobserve).toHaveBeenCalledOnce();
   });
 
   it('coalesces pointer updates into one animation frame and caps tilt', () => {
@@ -56,12 +90,8 @@ describe('motion directives', () => {
       toJSON: () => ({}),
     });
 
-    (directive as any).handlePointerMove(
-      new PointerEvent('pointermove', { clientX: 100, clientY: 0 }),
-    );
-    (directive as any).handlePointerMove(
-      new PointerEvent('pointermove', { clientX: 90, clientY: 10 }),
-    );
+    directive.handlePointerMove(new PointerEvent('pointermove', { clientX: 100, clientY: 0 }));
+    directive.handlePointerMove(new PointerEvent('pointermove', { clientX: 90, clientY: 10 }));
     expect(frameSpy).toHaveBeenCalledOnce();
 
     frameSpy.mock.calls[0][0](16);
@@ -79,9 +109,7 @@ describe('motion directives', () => {
     const directive = fixture.debugElement
       .query(By.css('.tilt-target'))
       .injector.get(PointerTiltDirective);
-    (directive as any).handlePointerMove(
-      new PointerEvent('pointermove', { clientX: 80, clientY: 20 }),
-    );
+    directive.handlePointerMove(new PointerEvent('pointermove', { clientX: 80, clientY: 20 }));
 
     expect(frameSpy).not.toHaveBeenCalled();
   });

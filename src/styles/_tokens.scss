@@ -57,6 +57,7 @@
   --duration-normal: 260ms;
   --duration-slow: 520ms;
   --duration-reveal: 700ms;
+  --duration-ambient-fast: 16s;
   --duration-ambient: 24s;
   --duration-ambient-slow: 32s;
   --ease-standard: cubic-bezier(0.2, 0, 0, 1);
@@ -65,4 +66,5 @@
   --ease-emphasized: cubic-bezier(0.34, 1.56, 0.64, 1);
   --reveal-distance: 18px;
   --ambient-shift: 18px;
+  --ambient-shift-large: 32px;
 }

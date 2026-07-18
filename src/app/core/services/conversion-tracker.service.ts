@@ -12,7 +12,7 @@ export class ConversionTrackerService {
 
   track(event: ConversionEvent): void {
     this.document.defaultView?.dispatchEvent(
-      new CustomEvent('pd-cabine:conversion', { detail: event })
+      new CustomEvent('pd-cabine:conversion', { detail: event }),
     );
   }
 }

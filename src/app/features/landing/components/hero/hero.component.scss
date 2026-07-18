@@ -258,7 +258,6 @@
   z-index: 3;
   color: #ffd6f6;
   text-shadow: 0 0 16px #ff55da;
-  animation: spark-drift 9s ease-in-out infinite alternate;
 }
 .spark--one {
   top: 20%;
@@ -269,7 +268,6 @@
   right: 3%;
   bottom: 30%;
   font-size: 0.8rem;
-  animation-delay: -4s;
 }
 
 @media (max-width: 1100px) {
@@ -359,6 +357,7 @@
   .brand-seal {
     bottom: -1.5rem;
     left: var(--space-3);
+    animation: none;
   }
   .brand-seal span {
     display: none;
@@ -375,6 +374,7 @@
     right: -1rem;
     width: 4rem;
     height: 4rem;
+    animation: none;
   }
 }
 

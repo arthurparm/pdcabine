@@ -26,7 +26,9 @@ describe('App', () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
     const page = fixture.nativeElement as HTMLElement;
-    const menuButton = page.querySelector<HTMLButtonElement>('[aria-controls="primary-navigation"]');
+    const menuButton = page.querySelector<HTMLButtonElement>(
+      '[aria-controls="primary-navigation"]',
+    );
     const headings = [...page.querySelectorAll('h1, h2')].map((heading) => heading.tagName);
 
     expect(page.querySelector('.skip-link')?.getAttribute('href')).toBe('#conteudo-principal');
@@ -35,14 +37,19 @@ describe('App', () => {
     expect(headings[0]).toBe('H1');
     expect(page.querySelector('#avaliacoes')?.textContent).toContain('246 avaliações públicas');
     expect(page.querySelector('app-social-proof')?.textContent).toContain('2022–2026');
-    expect(page.querySelector('.whatsapp-button')?.getAttribute('aria-label')).toContain('WhatsApp');
+    expect(page.querySelector('.whatsapp-button')?.getAttribute('aria-label')).toContain(
+      'WhatsApp',
+    );
+    expect(page.querySelector('.submit-button')?.classList).not.toContain('button--light');
   });
 
   it('opens and closes the responsive navigation state', async () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
     const page = fixture.nativeElement as HTMLElement;
-    const menuButton = page.querySelector<HTMLButtonElement>('[aria-controls="primary-navigation"]');
+    const menuButton = page.querySelector<HTMLButtonElement>(
+      '[aria-controls="primary-navigation"]',
+    );
 
     menuButton?.click();
     fixture.detectChanges();
@@ -50,6 +57,7 @@ describe('App', () => {
     expect(menuButton?.getAttribute('aria-expanded')).toBe('true');
     expect(page.querySelector('#primary-navigation')?.classList).toContain('navigation--open');
     expect(document.body.classList).toContain('menu-open');
+    expect(page.querySelector('.menu-backdrop')?.getAttribute('tabindex')).toBe('-1');
 
     document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
     fixture.detectChanges();
@@ -70,6 +78,28 @@ describe('App', () => {
     await fixture.whenStable();
 
     const firstService = page.querySelector<HTMLInputElement>('.service-options input');
+    expect(firstService?.checked).toBe(true);
+  });
+
+  it('reapplies a service when the same card action is used again', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+    const page = fixture.nativeElement as HTMLElement;
+    const firstCta = page.querySelector<HTMLAnchorElement>('.service-card a');
+    const firstService = page.querySelector<HTMLInputElement>('.service-options input');
+
+    firstCta?.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+    expect(firstService?.checked).toBe(true);
+
+    firstService?.click();
+    fixture.detectChanges();
+    expect(firstService?.checked).toBe(false);
+
+    firstCta?.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
     expect(firstService?.checked).toBe(true);
   });
 
@@ -103,9 +133,9 @@ describe('App', () => {
     fixture.detectChanges();
     await fixture.whenStable();
 
-    page.querySelector<HTMLFormElement>('form')?.dispatchEvent(
-      new Event('submit', { bubbles: true, cancelable: true })
-    );
+    page
+      .querySelector<HTMLFormElement>('form')
+      ?.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
     fixture.detectChanges();
     await new Promise((resolve) => setTimeout(resolve, 350));
     fixture.detectChanges();
@@ -118,11 +148,15 @@ describe('App', () => {
   it('opens, cycles and closes the lightbox while restoring focus', async () => {
     Object.defineProperty(HTMLDialogElement.prototype, 'showModal', {
       configurable: true,
-      value(this: HTMLDialogElement) { this.setAttribute('open', ''); }
+      value(this: HTMLDialogElement) {
+        this.setAttribute('open', '');
+      },
     });
     Object.defineProperty(HTMLDialogElement.prototype, 'close', {
       configurable: true,
-      value(this: HTMLDialogElement) { this.removeAttribute('open'); }
+      value(this: HTMLDialogElement) {
+        this.removeAttribute('open');
+      },
     });
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();

@@ -24,26 +24,32 @@ import { VisualHighlightComponent } from './components/visual-highlight/visual-h
     TestimonialsCarouselComponent,
     ContactSectionComponent,
     FooterComponent,
-    WhatsappFloatingButtonComponent
+    WhatsappFloatingButtonComponent,
   ],
   templateUrl: './landing-page.component.html',
-  styleUrl: './landing-page.component.scss'
+  styleUrl: './landing-page.component.scss',
 })
 export class LandingPageComponent {
   protected readonly config = SITE_CONFIG;
-  protected readonly selectedServiceId = signal<ServiceId | ''>('');
+  protected readonly selectedService = signal<{
+    readonly id: ServiceId;
+    readonly requestId: number;
+  } | null>(null);
   protected readonly heroImages = {
     primary: SITE_CONFIG.gallery[8],
     secondary: SITE_CONFIG.gallery[1],
-    tertiary: SITE_CONFIG.gallery[5]
+    tertiary: SITE_CONFIG.gallery[5],
   };
   protected readonly highlightImages = {
     primary: SITE_CONFIG.gallery.find((image) => image.id === 'tirinhas-casamento')!,
     secondary: SITE_CONFIG.gallery.find((image) => image.id === 'familia')!,
-    tertiary: SITE_CONFIG.gallery.find((image) => image.id === 'noiva-polaroids')!
+    tertiary: SITE_CONFIG.gallery.find((image) => image.id === 'noiva-polaroids')!,
   };
 
   protected selectService(serviceId: ServiceId): void {
-    this.selectedServiceId.set(serviceId);
+    this.selectedService.update((current) => ({
+      id: serviceId,
+      requestId: (current?.requestId ?? 0) + 1,
+    }));
   }
 }

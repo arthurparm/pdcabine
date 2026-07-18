@@ -1,13 +1,6 @@
 import type { GalleryImage } from '../models/gallery-image.model';
 import type { NavigationItem } from '../models/navigation-item.model';
 import type { Service } from '../models/service.model';
-import type { Testimonial } from '../models/testimonial.model';
-
-export interface SocialLink {
-  readonly kind: 'instagram' | 'whatsapp';
-  readonly label: string;
-  readonly url: string;
-}
 
 export interface SocialProofMetric {
   readonly label: string;
@@ -33,7 +26,6 @@ export interface PublicDataVerification {
 
 export interface SiteConfig {
   readonly companyName: string;
-  readonly institutionalName: string;
   readonly slogan: string;
   readonly cnpj: string;
   readonly serviceRegion: string;
@@ -58,7 +50,10 @@ export interface SiteConfig {
     readonly handle: string;
     readonly url: string;
   };
-  readonly socialLinks: readonly SocialLink[];
+  readonly reviews: {
+    readonly label: string;
+    readonly url: string;
+  };
   readonly navigation: readonly NavigationItem[];
   readonly services: readonly Service[];
   readonly gallery: readonly GalleryImage[];
@@ -67,13 +62,15 @@ export interface SiteConfig {
     readonly reviewCount: number;
     readonly recommendationRate: string;
     readonly metrics: readonly SocialProofMetric[];
-    readonly testimonials: readonly Testimonial[];
     readonly verification: PublicDataVerification;
   };
 }
 
 const ASSET_PATH = '/assets/images/pd-cabine';
-const LOGO_SRC_SET = `${ASSET_PATH}/logo-pd-cabine-192.webp 192w, ${ASSET_PATH}/logo-pd-cabine-384.webp 384w`;
+const RESPONSIVE_IMAGE_WIDTHS = [240, 320, 480, 800] as const;
+const LOGO_SRC_SET = [64, 128, 192, 384]
+  .map((width) => `${ASSET_PATH}/logo-pd-cabine-${width}.webp ${width}w`)
+  .join(', ');
 const WHATSAPP_NUMBER = '5511999892708';
 const WHATSAPP_MESSAGE =
   'Olá, PD Cabine! Conheci o trabalho de vocês pelo site e gostaria de solicitar um orçamento.';
@@ -82,12 +79,30 @@ export function createWhatsAppUrl(phone: string, message: string): string {
   return `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
 }
 
+function createWebpSrcSet(source: string, intrinsicWidth: number): string {
+  const extensionIndex = source.lastIndexOf('.');
+  const basePath = source.slice(0, extensionIndex);
+  const extension = source.slice(extensionIndex);
+  return [
+    ...RESPONSIVE_IMAGE_WIDTHS.filter((width) => width < intrinsicWidth).map(
+      (width) => `${basePath}-${width}${extension} ${width}w`,
+    ),
+    `${source} ${intrinsicWidth}w`,
+  ].join(', ');
+}
+
+function createCardWebpSrcSet(source: string): string {
+  const extensionIndex = source.lastIndexOf('.');
+  const basePath = source.slice(0, extensionIndex);
+  const extension = source.slice(extensionIndex);
+  return [480, 800].map((width) => `${basePath}-card-${width}${extension} ${width}w`).join(', ');
+}
+
 const whatsappUrl = createWhatsAppUrl(WHATSAPP_NUMBER, WHATSAPP_MESSAGE);
 const instagramUrl = 'https://www.instagram.com/pdcabine/';
 
 export const SITE_CONFIG = {
   companyName: 'PD Cabine',
-  institutionalName: 'PD Eventos',
   slogan: 'Capturando momentos, criando memórias.',
   cnpj: '39.487.633/0001-01',
   serviceRegion: 'São Paulo',
@@ -142,10 +157,10 @@ export const SITE_CONFIG = {
     handle: '@pdcabine',
     url: instagramUrl,
   },
-  socialLinks: [
-    { kind: 'instagram', label: 'Instagram da PD Cabine', url: instagramUrl },
-    { kind: 'whatsapp', label: 'WhatsApp da PD Cabine', url: whatsappUrl },
-  ],
+  reviews: {
+    label: 'Casamentos.com.br',
+    url: 'https://www.casamentos.com.br/cabine-de-fotos/pd-cabine--e269740',
+  },
   navigation: [
     { id: 'inicio', label: 'Início', href: '#inicio' },
     { id: 'experiencias', label: 'Experiências', href: '#experiencias' },
@@ -209,121 +224,128 @@ export const SITE_CONFIG = {
       id: 'festa-infantil',
       jpegSrc: `${ASSET_PATH}/festa-infantil-fotos-impressas.jpeg`,
       webpSrc: `${ASSET_PATH}/festa-infantil-fotos-impressas.webp`,
+      webpSrcSet: createWebpSrcSet(`${ASSET_PATH}/festa-infantil-fotos-impressas.webp`, 1200),
+      cardWebpSrcSet: createCardWebpSrcSet(`${ASSET_PATH}/festa-infantil-fotos-impressas.webp`),
       alt: 'Tirinhas fotográficas personalizadas de uma festa infantil.',
       caption: 'Lembranças impressas e personalizadas para uma festa infantil.',
       width: 1200,
       height: 1600,
       objectPosition: '50% 48%',
       gridSpan: 'feature',
-      serviceId: 'cabines',
     },
     {
       id: 'noiva-polaroids',
       jpegSrc: `${ASSET_PATH}/noiva-com-polaroids.jpeg`,
       webpSrc: `${ASSET_PATH}/noiva-com-polaroids.webp`,
+      webpSrcSet: createWebpSrcSet(`${ASSET_PATH}/noiva-com-polaroids.webp`, 1206),
       alt: 'Noiva sorrindo e segurando duas fotografias personalizadas.',
       caption: 'A noiva com as fotografias personalizadas do casamento.',
       width: 1206,
       height: 1563,
       objectPosition: '50% 25%',
       gridSpan: 'tall',
-      serviceId: 'totem-fotografico',
     },
     {
       id: 'totem-aderecos',
       jpegSrc: `${ASSET_PATH}/totem-fotografico-com-aderecos.jpeg`,
       webpSrc: `${ASSET_PATH}/totem-fotografico-com-aderecos.webp`,
+      webpSrcSet: createWebpSrcSet(`${ASSET_PATH}/totem-fotografico-com-aderecos.webp`, 1200),
+      cardWebpSrcSet: createCardWebpSrcSet(`${ASSET_PATH}/totem-fotografico-com-aderecos.webp`),
       alt: 'Totem fotográfico preto instalado ao lado de acessórios coloridos.',
       caption: 'Totem fotográfico e acessórios preparados para os convidados.',
       width: 1200,
       height: 1600,
       objectPosition: '50% 80%',
       gridSpan: 'standard',
-      serviceId: 'totem-fotografico',
     },
     {
       id: 'familia',
       jpegSrc: `${ASSET_PATH}/fotos-personalizadas-familia.jpeg`,
       webpSrc: `${ASSET_PATH}/fotos-personalizadas-familia.webp`,
+      webpSrcSet: createWebpSrcSet(`${ASSET_PATH}/fotos-personalizadas-familia.webp`, 900),
       alt: 'Fotografias personalizadas de uma família durante uma celebração.',
       caption: 'Registros personalizados de uma família durante a festa.',
       width: 900,
       height: 1600,
       objectPosition: '50% 46%',
       gridSpan: 'standard',
-      serviceId: 'totem-fotografico',
     },
     {
       id: 'totem-retro',
       jpegSrc: `${ASSET_PATH}/totem-retro-evento.jpeg`,
       webpSrc: `${ASSET_PATH}/totem-retro-evento.webp`,
+      webpSrcSet: createWebpSrcSet(`${ASSET_PATH}/totem-retro-evento.webp`, 1086),
+      cardWebpSrcSet: createCardWebpSrcSet(`${ASSET_PATH}/totem-retro-evento.webp`),
       alt: 'Totem fotográfico retrô com tripé de madeira e mesa de acessórios.',
       caption: 'Totem retrô integrado à decoração do evento.',
       width: 1086,
       height: 1448,
       objectPosition: '50% 78%',
       gridSpan: 'wide',
-      serviceId: 'totem-retro',
     },
     {
       id: 'plataforma-360',
       jpegSrc: `${ASSET_PATH}/plataforma-360-evento.jpeg`,
       webpSrc: `${ASSET_PATH}/plataforma-360-evento.webp`,
+      webpSrcSet: createWebpSrcSet(`${ASSET_PATH}/plataforma-360-evento.webp`, 1086),
+      cardWebpSrcSet: createCardWebpSrcSet(`${ASSET_PATH}/plataforma-360-evento.webp`),
       alt: 'Plataforma 360 com iluminação em espiral instalada em espaço para eventos.',
       caption: 'Plataforma 360 com espiral luminosa pronta para receber os convidados.',
       width: 1086,
       height: 1448,
       objectPosition: '50% 76%',
       gridSpan: 'tall',
-      serviceId: 'plataformas-video',
     },
     {
       id: 'espelho-magico',
       jpegSrc: `${ASSET_PATH}/espelho-magico-evento.jpeg`,
       webpSrc: `${ASSET_PATH}/espelho-magico-evento.webp`,
+      webpSrcSet: createWebpSrcSet(`${ASSET_PATH}/espelho-magico-evento.webp`, 1117),
+      cardWebpSrcSet: createCardWebpSrcSet(`${ASSET_PATH}/espelho-magico-evento.webp`),
       alt: 'Espelho mágico com moldura dourada instalado em um evento.',
       caption: 'Espelho mágico com moldura de destaque e interação em tela.',
       width: 1117,
       height: 1408,
       objectPosition: '50% 52%',
       gridSpan: 'standard',
-      serviceId: 'espelho-magico',
     },
     {
       id: 'tirinhas-casamento',
       jpegSrc: `${ASSET_PATH}/tirinhas-fotograficas-casamento.jpeg`,
       webpSrc: `${ASSET_PATH}/tirinhas-fotograficas-casamento.webp`,
+      webpSrcSet: createWebpSrcSet(`${ASSET_PATH}/tirinhas-fotograficas-casamento.webp`, 1206),
       alt: 'Tirinhas de fotos de casamento diante de uma decoração floral.',
       caption: 'Tirinhas personalizadas do casamento diante da decoração floral.',
       width: 1206,
       height: 1563,
       objectPosition: '50% 44%',
       gridSpan: 'wide',
-      serviceId: 'cabines',
     },
     {
       id: 'tunel-infinity',
       jpegSrc: `${ASSET_PATH}/tunel-infinity-com-totem.jpeg`,
       webpSrc: `${ASSET_PATH}/tunel-infinity-com-totem.webp`,
+      webpSrcSet: createWebpSrcSet(`${ASSET_PATH}/tunel-infinity-com-totem.webp`, 1114),
+      cardWebpSrcSet: createCardWebpSrcSet(`${ASSET_PATH}/tunel-infinity-com-totem.webp`),
       alt: 'Túnel Infinity iluminado ao lado de um totem fotográfico.',
       caption: 'Túnel Infinity e totem fotográfico compondo uma experiência imersiva.',
       width: 1114,
       height: 1412,
       objectPosition: '50% 58%',
       gridSpan: 'feature',
-      serviceId: 'tunel-infinity',
     },
     {
       id: 'caderno-assinaturas',
       jpegSrc: `${ASSET_PATH}/caderno-de-assinaturas.jpeg`,
       webpSrc: `${ASSET_PATH}/caderno-de-assinaturas.webp`,
+      webpSrcSet: createWebpSrcSet(`${ASSET_PATH}/caderno-de-assinaturas.webp`, 1200),
+      cardWebpSrcSet: createCardWebpSrcSet(`${ASSET_PATH}/caderno-de-assinaturas.webp`),
       alt: 'Caderno de assinaturas aberto com canetas sobre uma mesa decorada.',
       caption: 'Caderno preparado para reunir fotografias e mensagens dos convidados.',
       width: 1200,
       height: 1600,
       objectPosition: '50% 50%',
       gridSpan: 'standard',
-      serviceId: 'caderno-assinaturas',
     },
   ],
   socialProof: {
@@ -357,7 +379,6 @@ export const SITE_CONFIG = {
         animatedValue: { target: 100, decimals: 0, suffix: '%' },
       },
     ],
-    testimonials: [],
     verification: {
       verifiedAt: '2026-07-18',
       displayLabel: 'julho de 2026',

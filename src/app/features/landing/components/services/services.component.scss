@@ -7,16 +7,34 @@
 
 .services::before {
   position: absolute;
-  z-index: -1;
+  z-index: 0;
   pointer-events: none;
   content: '';
   inset: -24%;
   background:
-    radial-gradient(circle at 20% 30%, rgb(217 25 201 / 9%), transparent 28%),
-    radial-gradient(circle at 82% 72%, rgb(225 92 50 / 8%), transparent 30%);
-  opacity: 0.72;
+    radial-gradient(circle at 20% 30%, rgb(217 25 201 / 15%), transparent 28%),
+    radial-gradient(circle at 82% 72%, rgb(225 92 50 / 13%), transparent 30%),
+    radial-gradient(circle at 50% 48%, rgb(188 39 123 / 7%), transparent 20%);
+  opacity: 0.82;
   transform: translate3d(calc(var(--ambient-shift) * -0.45), 0, 0) scale(1.02);
-  animation: services-ambient var(--duration-ambient-slow) var(--ease-standard) infinite alternate;
+}
+
+.services::after {
+  position: absolute;
+  z-index: 0;
+  top: 20%;
+  right: -9rem;
+  width: 22rem;
+  aspect-ratio: 1;
+  pointer-events: none;
+  content: '';
+  border: 1px solid color-mix(in srgb, var(--color-magenta) 18%, transparent);
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 4rem color-mix(in srgb, var(--color-magenta) 4%, transparent),
+    0 0 0 8rem color-mix(in srgb, var(--color-orange-bright) 3%, transparent);
+  opacity: 0.7;
+  transform: translate3d(0, 0, 0) rotate(0deg);
 }
 
 .services > .container {
@@ -120,6 +138,7 @@
 
 .service-card a {
   display: inline-flex;
+  min-height: 44px;
   gap: var(--space-2);
   align-items: center;
   margin-top: auto;
@@ -145,13 +164,6 @@
   transition: transform var(--duration-normal) var(--ease-enter);
 }
 
-@keyframes services-ambient {
-  to {
-    opacity: 1;
-    transform: translate3d(var(--ambient-shift), calc(var(--ambient-shift) * -0.55), 0) scale(1.05);
-  }
-}
-
 @media (hover: hover) and (pointer: fine) {
   .service-card a {
     position: relative;
@@ -175,7 +187,8 @@
   }
 }
 @media (max-width: 580px) {
-  .services::before {
+  .services::before,
+  .services::after {
     animation: none;
     transform: none;
   }
@@ -192,7 +205,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .services::before {
+  .services::before,
+  .services::after {
     animation: none;
     transform: none;
   }

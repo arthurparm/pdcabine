@@ -7,7 +7,7 @@
     <a
       class="brand"
       href="#inicio"
-      (click)="closeMenu()"
+      (click)="followNavigation('inicio')"
       [attr.aria-label]="companyName() + ' — início'"
     >
       <img [src]="logoPath()" [srcset]="logoSrcSet()" sizes="54px" width="56" height="56" alt="" />
@@ -42,13 +42,13 @@
               [href]="item.href"
               [class.navigation__link--active]="activeSection() === item.id"
               [attr.aria-current]="activeSection() === item.id ? 'location' : null"
-              (click)="closeMenu()"
+              (click)="followNavigation(item.id)"
               >{{ item.label }}</a
             >
           </li>
         }
       </ul>
-      <a class="button button--compact" href="#orcamento" (click)="closeMenu()">
+      <a class="button button--compact" href="#orcamento" (click)="followNavigation('orcamento')">
         Solicitar orçamento
       </a>
     </nav>
@@ -58,6 +58,7 @@
   <button
     class="menu-backdrop"
     type="button"
+    tabindex="-1"
     aria-label="Fechar menu"
     animate.enter="menu-backdrop-enter"
     animate.leave="menu-backdrop-leave"

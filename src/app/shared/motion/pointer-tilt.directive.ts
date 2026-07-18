@@ -29,7 +29,7 @@ export class PointerTiltDirective implements OnDestroy {
 
   readonly appPointerTilt = input(3, { transform: numberAttribute });
 
-  protected handlePointerMove(event: PointerEvent): void {
+  handlePointerMove(event: PointerEvent): void {
     const view = this.document.defaultView;
     if (!this.motionIsAllowed(view) || !view) return;
 
@@ -49,7 +49,7 @@ export class PointerTiltDirective implements OnDestroy {
     });
   }
 
-  protected reset(): void {
+  reset(): void {
     const view = this.document.defaultView;
     if (this.frameId !== undefined && view) view.cancelAnimationFrame(this.frameId);
     this.frameId = undefined;

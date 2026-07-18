@@ -7,7 +7,7 @@
   [navigation]="config.navigation"
 />
 
-<main id="conteudo-principal">
+<main id="conteudo-principal" tabindex="-1">
   <app-hero
     [companyName]="config.companyName"
     [serviceRegion]="config.serviceRegion"
@@ -30,12 +30,13 @@
     [rating]="config.socialProof.rating"
     [reviewCount]="config.socialProof.reviewCount"
     [recommendationRate]="config.socialProof.recommendationRate"
+    [sourceLabel]="config.reviews.label"
+    [sourceUrl]="config.reviews.url"
   />
   <app-contact-section
-    [companyName]="config.companyName"
     [whatsappNumber]="config.whatsapp.normalized"
     [contactConfig]="config.contact"
-    [selectedServiceId]="selectedServiceId()"
+    [selectedService]="selectedService()"
   />
 </main>
 

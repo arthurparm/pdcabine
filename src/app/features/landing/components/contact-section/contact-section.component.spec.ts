@@ -10,7 +10,6 @@ import {
 describe('ContactSectionComponent', () => {
   let fixture: ReturnType<typeof TestBed.createComponent<ContactSectionComponent>>;
   let component: ContactSectionComponent;
-  let form: any;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -18,18 +17,17 @@ describe('ContactSectionComponent', () => {
     }).compileComponents();
     fixture = TestBed.createComponent(ContactSectionComponent);
     component = fixture.componentInstance;
-    fixture.componentRef.setInput('companyName', SITE_CONFIG.companyName);
     fixture.componentRef.setInput('whatsappNumber', SITE_CONFIG.whatsapp.normalized);
     fixture.componentRef.setInput('contactConfig', SITE_CONFIG.contact);
     fixture.detectChanges();
-    form = (component as any).budgetForm;
   });
 
   it('starts empty, invalid and without premature error messages', () => {
-    expect(form.invalid).toBe(true);
-    expect(form.controls.serviceIds.value).toEqual([]);
+    expect(component.budgetForm.invalid).toBe(true);
+    expect(component.budgetForm.controls.serviceIds.value).toEqual([]);
     expect(fixture.nativeElement.querySelectorAll('[id$="-error"]')).toHaveLength(0);
     expect(fixture.nativeElement.querySelector('.success-message')).toBeNull();
+    expect(fixture.nativeElement.querySelectorAll('[required]')).toHaveLength(6);
   });
 
   it('shows required validation feedback only after the first submit attempt', () => {
@@ -42,26 +40,39 @@ describe('ContactSectionComponent', () => {
     expect(fixture.nativeElement.querySelector('#consent-error')).not.toBeNull();
   });
 
+  it('moves focus to the first invalid field after an invalid submit', async () => {
+    fixture.nativeElement.querySelector('form').dispatchEvent(new Event('submit'));
+    fixture.detectChanges();
+    await new Promise((resolve) => setTimeout(resolve));
+
+    expect(document.activeElement).toBe(fixture.nativeElement.querySelector('#budget-name'));
+  });
+
   it('validates an optional e-mail only when it is filled', () => {
-    expect(form.controls.email.valid).toBe(true);
-    form.controls.email.setValue('email-invalido');
-    expect(form.controls.email.hasError('email')).toBe(true);
-    form.controls.email.setValue('contato@exemplo.com');
-    expect(form.controls.email.valid).toBe(true);
+    expect(component.budgetForm.controls.email.valid).toBe(true);
+    component.budgetForm.controls.email.setValue('email-invalido');
+    expect(component.budgetForm.controls.email.hasError('email')).toBe(true);
+    component.budgetForm.controls.email.setValue('contato@exemplo.com');
+    expect(component.budgetForm.controls.email.valid).toBe(true);
   });
 
   it('requires explicit consent', () => {
-    expect(form.controls.consent.hasError('required')).toBe(true);
-    form.controls.consent.setValue(true);
-    expect(form.controls.consent.valid).toBe(true);
+    expect(component.budgetForm.controls.consent.hasError('required')).toBe(true);
+    component.budgetForm.controls.consent.setValue(true);
+    expect(component.budgetForm.controls.consent.valid).toBe(true);
   });
 
   it('requires and supports multiple service selections', () => {
-    expect(form.controls.serviceIds.invalid).toBe(true);
-    (component as any).toggleService('totem-fotografico', true);
-    (component as any).toggleService('plataforma-360', true);
-    expect(form.controls.serviceIds.value).toEqual(['totem-fotografico', 'plataforma-360']);
-    expect(form.controls.serviceIds.valid).toBe(true);
+    expect(component.budgetForm.controls.serviceIds.invalid).toBe(true);
+    const element = fixture.nativeElement as HTMLElement;
+    const choices = element.querySelectorAll<HTMLInputElement>('.service-options input');
+    choices[0].click();
+    choices[5].click();
+    expect(component.budgetForm.controls.serviceIds.value).toEqual([
+      'totem-fotografico',
+      'plataforma-360',
+    ]);
+    expect(component.budgetForm.controls.serviceIds.valid).toBe(true);
   });
 
   it('blocks invalid submissions before opening a browsing context', () => {
@@ -78,7 +89,11 @@ describe('ContactSectionComponent', () => {
     fillValidForm();
 
     fixture.nativeElement.querySelector('form').dispatchEvent(new Event('submit'));
-    expect((component as any).processing()).toBe(true);
+    fixture.detectChanges();
+    const submitButton = (fixture.nativeElement as HTMLElement).querySelector<HTMLButtonElement>(
+      '.submit-button',
+    );
+    expect(submitButton?.disabled).toBe(true);
     expect(openSpy).toHaveBeenCalledOnce();
 
     await vi.advanceTimersByTimeAsync(300);
@@ -90,12 +105,12 @@ describe('ContactSectionComponent', () => {
     expect(fixture.nativeElement.querySelector('.fallback-button').href).toContain(
       'https://wa.me/5511999892708?text=',
     );
-    expect(form.controls.name.value).toBe('Maria da Silva');
+    expect(component.budgetForm.controls.name.value).toBe('Maria da Silva');
     vi.useRealTimers();
   });
 
   function fillValidForm(): void {
-    form.setValue({
+    component.budgetForm.setValue({
       name: 'Maria da Silva',
       phone: '(11) 99989-2708',
       email: '',

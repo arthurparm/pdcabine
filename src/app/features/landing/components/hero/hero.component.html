@@ -33,8 +33,11 @@
       <figure class="photo photo--primary">
         <img
           [ngSrc]="images().primary.webpSrc"
+          [ngSrcset]="'240w, 320w, 480w, 800w, ' + images().primary.width + 'w'"
+          [loaderParams]="{ originalWidth: images().primary.width }"
+          [width]="images().primary.width"
+          [height]="images().primary.height"
           [alt]="images().primary.alt"
-          fill
           sizes="(max-width: 600px) 55vw, (max-width: 900px) 68vw, 34vw"
           priority
         />
@@ -42,7 +45,11 @@
 
       <figure class="photo photo--secondary">
         <picture>
-          <source [srcset]="images().secondary.webpSrc" type="image/webp" />
+          <source
+            [srcset]="images().secondary.webpSrcSet"
+            sizes="(max-width: 600px) 40vw, (max-width: 900px) 32vw, 16vw"
+            type="image/webp"
+          />
           <img
             [src]="images().secondary.jpegSrc"
             [alt]="images().secondary.alt"
@@ -56,7 +63,11 @@
 
       <figure class="photo photo--tertiary">
         <picture>
-          <source [srcset]="images().tertiary.webpSrc" type="image/webp" />
+          <source
+            [srcset]="images().tertiary.webpSrcSet"
+            sizes="(max-width: 600px) 40vw, (max-width: 900px) 32vw, 16vw"
+            type="image/webp"
+          />
           <img
             [src]="images().tertiary.jpegSrc"
             [alt]="images().tertiary.alt"
