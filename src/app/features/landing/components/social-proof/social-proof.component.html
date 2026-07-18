@@ -1,0 +1,22 @@
+<section class="section section--compact section--surface" aria-labelledby="proof-title">
+  <div class="container proof-panel">
+    <div>
+      <p class="eyebrow">Confiança com transparência</p>
+      <h2 id="proof-title">Prova social baseada em dados verificáveis</h2>
+    </div>
+
+    @if (metrics().length > 0) {
+      <dl class="metrics">
+        @for (metric of metrics(); track metric.label) {
+          <div>
+            <dt>{{ metric.label }}</dt>
+            <dd>{{ metric.value }}</dd>
+          </div>
+        }
+      </dl>
+    } @else {
+      <p class="empty-state">Métricas públicas serão exibidas quando houver fonte e autorização verificáveis.</p>
+    }
+    <p class="verification">Dados institucionais verificados em {{ verificationDate() }}.</p>
+  </div>
+</section>

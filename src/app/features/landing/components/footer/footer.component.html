@@ -1,0 +1,30 @@
+<footer class="footer">
+  <div class="container footer-grid">
+    <div class="footer-brand">
+      <img [src]="config().logoPath" width="64" height="64" alt="" />
+      <div>
+        <strong>{{ config().companyName }}</strong>
+        <p>{{ config().slogan }}</p>
+      </div>
+    </div>
+
+    <div>
+      <h2>Institucional</h2>
+      <p>{{ config().institutionalName }}</p>
+      <p>CNPJ {{ config().cnpj }}</p>
+      <p>Atendimento em {{ config().serviceRegion }}</p>
+    </div>
+
+    <div>
+      <h2>Conecte-se</h2>
+      <ul>
+        @for (link of config().socialLinks; track link.kind) {
+          <li><a [href]="link.url" target="_blank" rel="noopener noreferrer">{{ link.label }}</a></li>
+        }
+      </ul>
+    </div>
+  </div>
+  <div class="container footer-bottom">
+    <small>© {{ currentYear }} {{ config().companyName }}. Todos os direitos reservados.</small>
+  </div>
+</footer>

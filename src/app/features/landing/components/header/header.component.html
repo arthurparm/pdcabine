@@ -1,0 +1,37 @@
+<header class="site-header">
+  <div class="container header-content">
+    <a class="brand" href="#inicio" (click)="closeMenu()" [attr.aria-label]="companyName() + ' — início'">
+      <img [src]="logoPath()" width="56" height="56" alt="" />
+      <span>{{ companyName() }}</span>
+    </a>
+
+    <button
+      class="menu-button"
+      type="button"
+      aria-controls="primary-navigation"
+      [attr.aria-expanded]="menuOpen()"
+      (click)="toggleMenu()"
+    >
+      <span class="sr-only">Abrir ou fechar menu</span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </button>
+
+    <nav
+      id="primary-navigation"
+      class="navigation"
+      aria-label="Navegação principal"
+      [class.navigation--open]="menuOpen()"
+    >
+      <ul>
+        @for (item of navigation(); track item.id) {
+          <li><a [href]="item.href" (click)="closeMenu()">{{ item.label }}</a></li>
+        }
+      </ul>
+      <a class="button button--compact" [href]="whatsappUrl()" target="_blank" rel="noopener noreferrer">
+        Pedir orçamento
+      </a>
+    </nav>
+  </div>
+</header>

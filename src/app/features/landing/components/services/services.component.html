@@ -1,0 +1,19 @@
+<section id="servicos" class="section section--surface" aria-labelledby="services-title">
+  <div class="container">
+    <div class="section-heading">
+      <p class="eyebrow">Soluções para cada celebração</p>
+      <h2 id="services-title">Experiências que convidam todo mundo a participar</h2>
+      <p>Uma base flexível para combinar fotografia, vídeo e lembranças físicas no seu evento.</p>
+    </div>
+
+    <ul class="services-grid">
+      @for (service of services(); track service.id; let index = $index) {
+        <li>
+          <span class="service-index" aria-hidden="true">{{ (index + 1).toString().padStart(2, '0') }}</span>
+          <h3>{{ service.name }}</h3>
+          <p>{{ service.summary }}</p>
+        </li>
+      }
+    </ul>
+  </div>
+</section>

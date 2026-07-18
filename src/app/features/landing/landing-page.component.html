@@ -1,0 +1,33 @@
+<a class="skip-link" href="#conteudo-principal">Ir para o conteúdo principal</a>
+
+<app-header
+  [companyName]="config.companyName"
+  [logoPath]="config.logoPath"
+  [navigation]="config.navigation"
+  [whatsappUrl]="config.whatsapp.url"
+/>
+
+<main id="conteudo-principal">
+  <app-hero
+    [companyName]="config.companyName"
+    [slogan]="config.slogan"
+    [serviceRegion]="config.serviceRegion"
+    [whatsappUrl]="config.whatsapp.url"
+    [heroImage]="heroImage"
+  />
+  <app-services [services]="config.services" />
+  <app-experience-gallery [images]="config.gallery" />
+  <app-social-proof
+    [metrics]="config.socialProof.metrics"
+    [verificationDate]="config.socialProof.verification.verifiedAt"
+  />
+  <app-testimonials-carousel [testimonials]="config.socialProof.testimonials" />
+  <app-contact-section
+    [companyName]="config.companyName"
+    [serviceRegion]="config.serviceRegion"
+    [whatsappUrl]="config.whatsapp.url"
+  />
+</main>
+
+<app-footer [config]="config" />
+<app-whatsapp-floating-button [url]="config.whatsapp.url" [companyName]="config.companyName" />

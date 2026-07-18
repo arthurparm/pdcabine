@@ -1,0 +1,29 @@
+.contact {
+  padding-top: var(--space-5);
+}
+
+.contact-panel {
+  padding: clamp(var(--space-7), 7vw, var(--space-11));
+  border-radius: var(--radius-xl);
+  background: var(--gradient-brand);
+  box-shadow: var(--shadow-brand);
+  text-align: center;
+}
+
+.contact-panel h2 {
+  max-width: 13ch;
+  margin: var(--space-3) auto;
+  font-size: clamp(2.2rem, 6vw, 4.8rem);
+  line-height: 1;
+}
+
+.contact-panel p:not(.eyebrow) {
+  max-width: 42rem;
+  margin: 0 auto var(--space-7);
+  color: rgb(255 255 255 / 86%);
+  line-height: 1.7;
+}
+
+.contact-panel .eyebrow {
+  color: white;
+}

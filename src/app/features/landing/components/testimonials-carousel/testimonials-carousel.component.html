@@ -1,0 +1,24 @@
+<section id="depoimentos" class="section" aria-labelledby="testimonials-title">
+  <div class="container">
+    <div class="section-heading">
+      <p class="eyebrow">Feedbacks</p>
+      <h2 id="testimonials-title">O evento pela perspectiva de quem viveu</h2>
+    </div>
+
+    @if (testimonials().length > 0) {
+      <div class="testimonials" aria-label="Depoimentos de clientes">
+        @for (testimonial of testimonials(); track testimonial.id) {
+          <figure>
+            <blockquote>“{{ testimonial.quote }}”</blockquote>
+            <figcaption>{{ testimonial.author }} · {{ testimonial.eventType }}</figcaption>
+          </figure>
+        }
+      </div>
+    } @else {
+      <div class="empty-testimonials" role="status">
+        <span aria-hidden="true">✦</span>
+        <p>Depoimentos autorizados serão publicados aqui. Nenhuma avaliação foi inventada.</p>
+      </div>
+    }
+  </div>
+</section>

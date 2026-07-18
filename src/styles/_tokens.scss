@@ -1,0 +1,51 @@
+:root {
+  --color-magenta: #d73fdf;
+  --color-pink: #bb3385;
+  --color-orange: #c75a3b;
+  --color-silver-light: #e7e2e1;
+  --color-silver: #beb5b3;
+  --color-wine-shadow: #71363c;
+
+  --color-background: #120d14;
+  --color-surface: #1b141d;
+  --color-surface-raised: #261b28;
+  --color-text: #fff8fc;
+  --color-text-secondary: #d8cdd6;
+  --color-text-muted: #a99ba6;
+  --color-border: rgb(231 226 225 / 14%);
+
+  --gradient-brand: linear-gradient(135deg, #d73fdf 0%, #bb3385 36%, #c75a3b 100%);
+  --gradient-brand-soft: linear-gradient(135deg, rgb(215 63 223 / 12%), rgb(199 90 59 / 8%));
+  --gradient-glow-top: radial-gradient(circle at top left, rgb(215 63 223 / 34%), transparent 42%);
+  --gradient-glow-bottom: radial-gradient(circle at bottom right, rgb(199 90 59 / 28%), transparent 46%);
+
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
+  --radius-pill: 999px;
+
+  --shadow-card: 0 18px 55px rgb(5 1 7 / 36%);
+  --shadow-image: 0 30px 80px rgb(5 1 7 / 52%);
+  --shadow-brand: 0 24px 80px rgb(113 54 60 / 40%);
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 40px;
+  --space-8: 48px;
+  --space-9: 56px;
+  --space-10: 64px;
+  --space-11: 80px;
+  --space-12: 96px;
+
+  --content-max: 1200px;
+  --page-gutter: clamp(20px, 4vw, 48px);
+  --duration-fast: 160ms;
+  --duration-normal: 260ms;
+  --duration-slow: 420ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+}

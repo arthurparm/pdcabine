@@ -1,0 +1,27 @@
+<section id="experiencias" class="section" aria-labelledby="gallery-title">
+  <div class="container">
+    <div class="section-heading">
+      <p class="eyebrow">Eventos reais, memórias reais</p>
+      <h2 id="gallery-title">Um pouco da experiência PD Cabine</h2>
+      <p>Registros dos equipamentos e das lembranças entregues em diferentes celebrações.</p>
+    </div>
+
+    <div class="gallery-grid">
+      @for (image of images(); track image.id; let index = $index) {
+        <figure [class.gallery-featured]="index === 0 || index === 5">
+          <picture>
+            <source [srcset]="image.webpSrc" type="image/webp" />
+            <img
+              [src]="image.jpegSrc"
+              [alt]="image.alt"
+              [width]="image.width"
+              [height]="image.height"
+              loading="lazy"
+              decoding="async"
+            />
+          </picture>
+        </figure>
+      }
+    </div>
+  </div>
+</section>
