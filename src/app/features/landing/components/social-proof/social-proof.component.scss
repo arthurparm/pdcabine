@@ -5,6 +5,34 @@
   border-bottom: 1px solid var(--color-border);
   background: linear-gradient(105deg, #fff, #f2eced 48%, #fff8f2);
   box-shadow: 0 -12px 36px rgb(5 1 7 / 14%);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.social-proof::before {
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+  content: '';
+  inset: -100% -12%;
+  background:
+    radial-gradient(circle at 24% 45%, rgb(217 25 201 / 10%), transparent 22%),
+    radial-gradient(circle at 76% 55%, rgb(225 92 50 / 9%), transparent 22%);
+  opacity: 0.65;
+  transform: translate3d(calc(var(--ambient-shift) * -0.4), 0, 0);
+  animation: proof-ambient var(--duration-ambient-slow) var(--ease-standard) infinite alternate;
+}
+
+.proof-panel {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes proof-ambient {
+  to {
+    opacity: 0.9;
+    transform: translate3d(var(--ambient-shift), 0, 0);
+  }
 }
 
 .metrics {
@@ -20,7 +48,9 @@
   text-align: center;
 }
 
-.metrics > div:last-child { border-right: 0; }
+.metrics > div:last-child {
+  border-right: 0;
+}
 
 .metrics dd {
   margin: 0 0 var(--space-1);
@@ -47,11 +77,36 @@
   text-align: center;
 }
 
-.verification span { color: #39a56a; font-size: 0.58rem; }
+.verification span {
+  color: #39a56a;
+  font-size: 0.58rem;
+}
 
 @media (max-width: 800px) {
-  .metrics { grid-template-columns: repeat(2, 1fr); }
-  .metrics > div { padding: var(--space-4); border-bottom: 1px solid var(--color-border); }
-  .metrics > div:nth-child(even) { border-right: 0; }
-  .metrics > div:last-child { grid-column: 1 / -1; border-bottom: 0; }
+  .social-proof::before {
+    animation: none;
+    transform: none;
+  }
+
+  .metrics {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .metrics > div {
+    padding: var(--space-4);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .metrics > div:nth-child(even) {
+    border-right: 0;
+  }
+  .metrics > div:last-child {
+    grid-column: 1 / -1;
+    border-bottom: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .social-proof::before {
+    animation: none;
+    transform: none;
+  }
 }

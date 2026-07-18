@@ -3,6 +3,7 @@
 <app-header
   [companyName]="config.companyName"
   [logoPath]="config.logoPath"
+  [logoSrcSet]="config.logoSrcSet"
   [navigation]="config.navigation"
 />
 
@@ -11,14 +12,19 @@
     [companyName]="config.companyName"
     [serviceRegion]="config.serviceRegion"
     [logoPath]="config.logoPath"
+    [logoSrcSet]="config.logoSrcSet"
     [images]="heroImages"
   />
   <app-social-proof
     [metrics]="config.socialProof.metrics"
     [verificationDate]="config.socialProof.verification.displayLabel"
   />
-  <app-services [services]="config.services" />
-  <app-visual-highlight [image]="config.gallery[5]" />
+  <app-services
+    [services]="config.services"
+    [images]="config.gallery"
+    (serviceSelected)="selectService($event)"
+  />
+  <app-visual-highlight [images]="highlightImages" />
   <app-experience-gallery [images]="config.gallery" />
   <app-testimonials-carousel
     [rating]="config.socialProof.rating"
@@ -27,9 +33,9 @@
   />
   <app-contact-section
     [companyName]="config.companyName"
-    [serviceRegion]="config.serviceRegion"
-    [whatsappUrl]="config.whatsapp.url"
     [whatsappNumber]="config.whatsapp.normalized"
+    [contactConfig]="config.contact"
+    [selectedServiceId]="selectedServiceId()"
   />
 </main>
 

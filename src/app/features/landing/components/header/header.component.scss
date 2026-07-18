@@ -6,8 +6,10 @@
   left: 0;
   border-bottom: 1px solid transparent;
   color: var(--color-text-on-dark);
-  transition: background-color var(--duration-normal) var(--ease-standard),
-    box-shadow var(--duration-normal) var(--ease-standard), border-color var(--duration-normal) var(--ease-standard);
+  transition:
+    background-color var(--duration-normal) var(--ease-standard),
+    box-shadow var(--duration-normal) var(--ease-standard),
+    border-color var(--duration-normal) var(--ease-standard);
 }
 
 .site-header--scrolled,
@@ -45,6 +47,12 @@
   border-radius: 50%;
   background: white;
   box-shadow: 0 7px 22px rgb(8 4 9 / 22%);
+  transform: scale(1);
+  transition: transform var(--duration-normal) var(--ease-enter);
+}
+
+.site-header--scrolled .brand img {
+  transform: scale(0.9);
 }
 
 .navigation,
@@ -78,7 +86,9 @@
   content: '';
   opacity: 0;
   transform: scaleX(0.4);
-  transition: opacity var(--duration-fast), transform var(--duration-fast);
+  transition:
+    opacity var(--duration-fast),
+    transform var(--duration-fast);
 }
 
 .navigation a:hover,
@@ -107,12 +117,20 @@
   margin: 5px 0;
   border-radius: 2px;
   background: currentcolor;
-  transition: transform var(--duration-fast), opacity var(--duration-fast);
+  transition:
+    transform var(--duration-fast),
+    opacity var(--duration-fast);
 }
 
-.menu-button--open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-.menu-button--open span:nth-child(2) { opacity: 0; }
-.menu-button--open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+.menu-button--open span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.menu-button--open span:nth-child(2) {
+  opacity: 0;
+}
+.menu-button--open span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
 
 .menu-backdrop {
   position: fixed;
@@ -122,8 +140,29 @@
   inset: 82px 0 0;
 }
 
+.menu-backdrop-enter {
+  animation: menu-backdrop-in var(--duration-normal) var(--ease-enter);
+}
+.menu-backdrop-leave {
+  animation: menu-backdrop-out var(--duration-fast) var(--ease-exit);
+}
+
+@keyframes menu-backdrop-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes menu-backdrop-out {
+  to {
+    opacity: 0;
+  }
+}
+
 @media (max-width: 900px) {
-  .menu-button { display: block; }
+  .menu-button {
+    display: block;
+  }
 
   .navigation {
     position: absolute;
@@ -140,7 +179,9 @@
     opacity: 0;
     pointer-events: none;
     transform: translateY(-12px);
-    transition: opacity var(--duration-normal), transform var(--duration-normal);
+    transition:
+      opacity var(--duration-normal),
+      transform var(--duration-normal);
   }
 
   .navigation--open {
@@ -162,9 +203,23 @@
     font-size: clamp(1.15rem, 4vw, 1.55rem);
   }
 
-  .navigation .button { margin-top: var(--space-5); }
+  .navigation .button {
+    margin-top: var(--space-5);
+  }
 }
 
 @media (max-width: 390px) {
-  .brand-name { display: none; }
+  .brand-name {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brand img {
+    transform: none;
+  }
+  .menu-backdrop-enter,
+  .menu-backdrop-leave {
+    animation: none;
+  }
 }

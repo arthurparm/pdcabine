@@ -1,4 +1,5 @@
 <section id="inicio" class="hero" aria-labelledby="hero-title">
+  <span id="header-scroll-sentinel" class="header-scroll-sentinel" aria-hidden="true"></span>
   <span class="hero-glow hero-glow--one" aria-hidden="true"></span>
   <span class="hero-glow hero-glow--two" aria-hidden="true"></span>
   <span class="light-trace" aria-hidden="true"></span>
@@ -28,13 +29,13 @@
       </ul>
     </div>
 
-    <div class="hero-media" aria-label="Experiências da PD Cabine em eventos">
+    <div class="hero-media" aria-label="Experiências da PD Cabine em eventos" [appPointerTilt]="2">
       <figure class="photo photo--primary">
         <img
           [ngSrc]="images().primary.webpSrc"
           [alt]="images().primary.alt"
-          [width]="images().primary.width"
-          [height]="images().primary.height"
+          fill
+          sizes="(max-width: 600px) 55vw, (max-width: 900px) 68vw, 34vw"
           priority
         />
       </figure>
@@ -68,7 +69,14 @@
       </figure>
 
       <div class="brand-seal">
-        <img [src]="logoPath()" width="96" height="96" alt="" />
+        <img
+          [src]="logoPath()"
+          [srcset]="logoSrcSet()"
+          sizes="52px"
+          width="96"
+          height="96"
+          alt=""
+        />
         <span>{{ companyName() }}<br />momentos que ficam</span>
       </div>
       <span class="spiral" aria-hidden="true"></span>

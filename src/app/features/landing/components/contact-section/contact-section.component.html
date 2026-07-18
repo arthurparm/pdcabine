@@ -1,50 +1,279 @@
 <section id="orcamento" class="section contact" aria-labelledby="contact-title">
   <div class="container contact-grid">
-    <div class="contact-copy">
-      <p class="eyebrow">Seu evento começa aqui</p>
-      <h2 id="contact-title">Vamos criar algo memorável?</h2>
-      <p>
-        Conte o essencial sobre a celebração. Ao enviar, abriremos uma conversa no WhatsApp com os
-        dados preenchidos para você revisar antes de mandar.
-      </p>
-      <a class="direct-link" [href]="whatsappUrl()" target="_blank" rel="noopener noreferrer">
-        Prefere ir direto ao WhatsApp? <strong>Fale com a equipe →</strong>
-      </a>
+    <div class="contact-copy" appReveal="up">
+      <p class="eyebrow">Solicite seu orçamento</p>
+      <h2 id="contact-title">{{ contactConfig().title }}</h2>
+      <p>{{ contactConfig().description }}</p>
     </div>
 
-    <form #budgetForm="ngForm" (ngSubmit)="submitBudget(budgetForm)" novalidate>
-      <div class="field">
-        <label for="budget-name">Seu nome</label>
-        <input id="budget-name" name="name" type="text" autocomplete="name" ngModel required #name="ngModel" />
-        @if (name.invalid && name.touched) { <small>Informe seu nome.</small> }
+    <form
+      appReveal="scale"
+      [revealDelay]="100"
+      [formGroup]="budgetForm"
+      (ngSubmit)="submitBudget()"
+      novalidate
+    >
+      <div class="field-row">
+        <div class="field">
+          <label for="budget-name">Nome completo <span aria-hidden="true">*</span></label>
+          <input
+            id="budget-name"
+            type="text"
+            formControlName="name"
+            autocomplete="name"
+            maxlength="120"
+            (blur)="trimField('name')"
+            [attr.aria-invalid]="showError(budgetForm.controls.name)"
+            [attr.aria-describedby]="
+              showError(budgetForm.controls.name) ? 'budget-name-error' : null
+            "
+          />
+          @if (showError(budgetForm.controls.name)) {
+            <small id="budget-name-error" animate.enter="validation-message-enter"
+              >Informe seu nome completo com pelo menos 3 caracteres.</small
+            >
+          }
+        </div>
+
+        <div class="field">
+          <label for="budget-phone">WhatsApp <span aria-hidden="true">*</span></label>
+          <input
+            id="budget-phone"
+            type="tel"
+            formControlName="phone"
+            autocomplete="tel"
+            inputmode="tel"
+            maxlength="15"
+            placeholder="(11) 99999-9999"
+            (input)="onPhoneInput($event)"
+            [attr.aria-invalid]="showError(budgetForm.controls.phone)"
+            [attr.aria-describedby]="
+              showError(budgetForm.controls.phone) ? 'budget-phone-error' : null
+            "
+          />
+          @if (showError(budgetForm.controls.phone)) {
+            <small id="budget-phone-error" animate.enter="validation-message-enter"
+              >Informe um WhatsApp válido com DDD.</small
+            >
+          }
+        </div>
       </div>
 
       <div class="field-row">
         <div class="field">
-          <label for="event-type">Tipo de evento</label>
-          <select id="event-type" name="eventType" ngModel required #eventType="ngModel">
-            <option value="" disabled>Selecione</option>
-            <option>Casamento</option>
-            <option>Aniversário</option>
-            <option>Evento corporativo</option>
-            <option>Formatura</option>
-            <option>Outro evento</option>
-          </select>
-          @if (eventType.invalid && eventType.touched) { <small>Selecione o tipo de evento.</small> }
+          <label for="budget-email">E-mail <span>(opcional)</span></label>
+          <input
+            id="budget-email"
+            type="email"
+            formControlName="email"
+            autocomplete="email"
+            inputmode="email"
+            maxlength="160"
+            (blur)="trimField('email')"
+            [attr.aria-invalid]="showError(budgetForm.controls.email)"
+            [attr.aria-describedby]="
+              showError(budgetForm.controls.email) ? 'budget-email-error' : null
+            "
+          />
+          @if (showError(budgetForm.controls.email)) {
+            <small id="budget-email-error" animate.enter="validation-message-enter"
+              >Digite um e-mail válido.</small
+            >
+          }
         </div>
+
         <div class="field">
-          <label for="event-date">Data <span>(opcional)</span></label>
-          <input id="event-date" name="eventDate" type="date" ngModel />
+          <label for="event-date">Data do evento <span aria-hidden="true">*</span></label>
+          <input
+            id="event-date"
+            type="date"
+            formControlName="eventDate"
+            autocomplete="off"
+            [attr.aria-invalid]="showError(budgetForm.controls.eventDate)"
+            [attr.aria-describedby]="
+              showError(budgetForm.controls.eventDate) ? 'event-date-error' : null
+            "
+          />
+          @if (showError(budgetForm.controls.eventDate)) {
+            <small id="event-date-error" animate.enter="validation-message-enter"
+              >Informe a data do evento.</small
+            >
+          }
         </div>
       </div>
 
-      <div class="field">
-        <label for="budget-message">Conte um pouco sobre o evento <span>(opcional)</span></label>
-        <textarea id="budget-message" name="message" rows="4" ngModel></textarea>
+      <div class="field-row">
+        <div class="field">
+          <label for="event-type">Tipo de evento <span aria-hidden="true">*</span></label>
+          <select
+            id="event-type"
+            formControlName="eventType"
+            autocomplete="off"
+            [attr.aria-invalid]="showError(budgetForm.controls.eventType)"
+            [attr.aria-describedby]="
+              showError(budgetForm.controls.eventType) ? 'event-type-error' : null
+            "
+          >
+            <option value="" disabled>Selecione</option>
+            @for (eventType of contactConfig().eventTypes; track eventType) {
+              <option [value]="eventType">{{ eventType }}</option>
+            }
+          </select>
+          @if (showError(budgetForm.controls.eventType)) {
+            <small id="event-type-error" animate.enter="validation-message-enter"
+              >Selecione o tipo de evento.</small
+            >
+          }
+        </div>
+
+        <div class="field">
+          <label for="budget-region">Cidade ou região <span aria-hidden="true">*</span></label>
+          <input
+            id="budget-region"
+            type="text"
+            formControlName="region"
+            autocomplete="address-level2"
+            maxlength="120"
+            (blur)="trimField('region')"
+            [attr.aria-invalid]="showError(budgetForm.controls.region)"
+            [attr.aria-describedby]="
+              showError(budgetForm.controls.region) ? 'budget-region-error' : null
+            "
+          />
+          @if (showError(budgetForm.controls.region)) {
+            <small id="budget-region-error" animate.enter="validation-message-enter"
+              >Informe a cidade ou região do evento.</small
+            >
+          }
+        </div>
       </div>
 
-      <button class="button button--light" type="submit">Solicitar orçamento pelo WhatsApp</button>
-      <p class="privacy-note">Nenhum dado é armazenado neste site.</p>
+      <div class="field field--short">
+        <label for="guest-count">Quantidade aproximada de convidados <span>(opcional)</span></label>
+        <input
+          id="guest-count"
+          type="number"
+          formControlName="guestCount"
+          inputmode="numeric"
+          min="1"
+          step="1"
+          autocomplete="off"
+          [attr.aria-invalid]="showError(budgetForm.controls.guestCount)"
+          [attr.aria-describedby]="
+            showError(budgetForm.controls.guestCount) ? 'guest-count-error' : null
+          "
+        />
+        @if (showError(budgetForm.controls.guestCount)) {
+          <small id="guest-count-error" animate.enter="validation-message-enter"
+            >Informe uma quantidade maior que zero.</small
+          >
+        }
+      </div>
+
+      <fieldset
+        class="services-field"
+        [attr.aria-describedby]="
+          showError(budgetForm.controls.serviceIds) ? 'services-error' : null
+        "
+      >
+        <legend>Serviços de interesse <span aria-hidden="true">*</span></legend>
+        <div class="service-options">
+          @for (service of contactConfig().serviceOptions; track service.id) {
+            <label class="check-card">
+              <input
+                type="checkbox"
+                [checked]="isServiceSelected(service.id)"
+                (change)="toggleService(service.id, $any($event.target).checked)"
+              />
+              <span>{{ service.label }}</span>
+            </label>
+          }
+        </div>
+        @if (showError(budgetForm.controls.serviceIds)) {
+          <small id="services-error" animate.enter="validation-message-enter"
+            >Selecione pelo menos um serviço.</small
+          >
+        }
+      </fieldset>
+
+      <div class="field message-field">
+        <div class="label-row">
+          <label for="budget-message">Mensagem adicional <span>(opcional)</span></label>
+          <span class="character-count"
+            >{{ budgetForm.controls.message.value.length }}/{{
+              contactConfig().messageMaxLength
+            }}</span
+          >
+        </div>
+        <textarea
+          id="budget-message"
+          formControlName="message"
+          rows="4"
+          [attr.maxlength]="contactConfig().messageMaxLength"
+          (blur)="trimField('message')"
+          [attr.aria-invalid]="showError(budgetForm.controls.message)"
+          [attr.aria-describedby]="
+            showError(budgetForm.controls.message) ? 'budget-message-error' : null
+          "
+        ></textarea>
+        @if (showError(budgetForm.controls.message)) {
+          <small id="budget-message-error" animate.enter="validation-message-enter"
+            >A mensagem excedeu o limite permitido.</small
+          >
+        }
+      </div>
+
+      <div class="consent-field">
+        <label>
+          <input
+            type="checkbox"
+            formControlName="consent"
+            [attr.aria-invalid]="showError(budgetForm.controls.consent)"
+            [attr.aria-describedby]="
+              showError(budgetForm.controls.consent) ? 'consent-error' : 'privacy-notice'
+            "
+          />
+          <span
+            >Autorizo o contato da PD Cabine sobre esta solicitação.
+            <span aria-hidden="true">*</span></span
+          >
+        </label>
+        @if (showError(budgetForm.controls.consent)) {
+          <small id="consent-error" animate.enter="validation-message-enter"
+            >Você precisa autorizar o contato para continuar.</small
+          >
+        }
+      </div>
+
+      <p id="privacy-notice" class="privacy-note">{{ contactConfig().privacyNotice }}</p>
+
+      <button class="button button--light submit-button" type="submit" [disabled]="processing()">
+        @if (processing()) {
+          <span class="submit-spinner" aria-hidden="true"></span>
+          Preparando sua solicitação…
+        } @else {
+          Solicitar orçamento pelo WhatsApp
+        }
+      </button>
+
+      <div class="status-region" aria-live="polite" aria-atomic="true">
+        @if (success()) {
+          <p class="success-message" animate.enter="status-message-enter">
+            Sua solicitação foi preparada. Continue o atendimento pelo WhatsApp.
+          </p>
+        }
+        @if (fallbackUrl()) {
+          <a
+            class="fallback-button"
+            animate.enter="status-message-enter"
+            [href]="fallbackUrl()"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Abrir conversa no WhatsApp
+          </a>
+        }
+      </div>
     </form>
   </div>
 </section>

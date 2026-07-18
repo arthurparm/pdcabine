@@ -1,14 +1,19 @@
 <section class="social-proof" aria-labelledby="proof-title">
-  <div class="container proof-panel">
+  <div #proofPanel class="container proof-panel">
     <h2 id="proof-title" class="sr-only">Reconhecimento e avaliações da PD Cabine</h2>
     <dl class="metrics">
-      @for (metric of metrics(); track metric.label) {
-        <div>
-          <dd>{{ metric.value }}</dd>
+      @for (metric of metrics(); track metric.label; let index = $index) {
+        <div appReveal="up" [revealDelay]="index * 70">
+          <dd>
+            <span class="sr-only">{{ metric.value }}</span>
+            <span aria-hidden="true">{{ displayedValue(index, metric) }}</span>
+          </dd>
           <dt>{{ metric.label }}</dt>
         </div>
       }
     </dl>
-    <p class="verification"><span aria-hidden="true">●</span> Dados públicos verificados em {{ verificationDate() }}.</p>
+    <p class="verification">
+      <span aria-hidden="true">●</span> Dados públicos verificados em {{ verificationDate() }}.
+    </p>
   </div>
 </section>

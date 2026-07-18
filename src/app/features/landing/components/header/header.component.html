@@ -1,7 +1,16 @@
-<header class="site-header" [class.site-header--scrolled]="scrolled()" [class.site-header--menu-open]="menuOpen()">
+<header
+  class="site-header"
+  [class.site-header--scrolled]="scrolled()"
+  [class.site-header--menu-open]="menuOpen()"
+>
   <div class="container header-content">
-    <a class="brand" href="#inicio" (click)="closeMenu()" [attr.aria-label]="companyName() + ' — início'">
-      <img [src]="logoPath()" width="56" height="56" alt="" />
+    <a
+      class="brand"
+      href="#inicio"
+      (click)="closeMenu()"
+      [attr.aria-label]="companyName() + ' — início'"
+    >
+      <img [src]="logoPath()" [srcset]="logoSrcSet()" sizes="54px" width="56" height="56" alt="" />
       <span class="brand-name">{{ companyName() }}</span>
     </a>
 
@@ -34,7 +43,8 @@
               [class.navigation__link--active]="activeSection() === item.id"
               [attr.aria-current]="activeSection() === item.id ? 'location' : null"
               (click)="closeMenu()"
-            >{{ item.label }}</a>
+              >{{ item.label }}</a
+            >
           </li>
         }
       </ul>
@@ -45,5 +55,12 @@
   </div>
 </header>
 @if (menuOpen()) {
-  <button class="menu-backdrop" type="button" aria-label="Fechar menu" (click)="closeMenu(true)"></button>
+  <button
+    class="menu-backdrop"
+    type="button"
+    aria-label="Fechar menu"
+    animate.enter="menu-backdrop-enter"
+    animate.leave="menu-backdrop-leave"
+    (click)="closeMenu(true)"
+  ></button>
 }

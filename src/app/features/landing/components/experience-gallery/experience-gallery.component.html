@@ -1,27 +1,105 @@
-<section id="galeria" class="section" aria-labelledby="gallery-title">
+<section id="galeria" class="section gallery" aria-labelledby="gallery-title">
   <div class="container">
-    <div class="section-heading">
-      <p class="eyebrow">Eventos reais, memórias reais</p>
-      <h2 id="gallery-title">Um pouco da experiência PD Cabine</h2>
-      <p>Registros dos equipamentos e das lembranças entregues em diferentes celebrações.</p>
+    <div class="section-heading" appReveal="up">
+      <p class="eyebrow">Eventos reais</p>
+      <h2 id="gallery-title">Momentos que ficam</h2>
+      <p>Um pouco das experiências, estruturas e lembranças criadas em eventos reais.</p>
     </div>
 
     <div class="gallery-grid">
       @for (image of images(); track image.id; let index = $index) {
-        <figure [class.gallery-featured]="index === 0 || index === 5">
-          <picture>
-            <source [srcset]="image.webpSrc" type="image/webp" />
-            <img
-              [src]="image.jpegSrc"
-              [alt]="image.alt"
-              [width]="image.width"
-              [height]="image.height"
-              loading="lazy"
-              decoding="async"
-            />
-          </picture>
+        <figure
+          [class]="'gallery-item gallery-item--' + image.gridSpan"
+          appReveal="up"
+          [revealDelay]="(index % 4) * 70"
+        >
+          <button
+            #thumbnail
+            type="button"
+            class="gallery-trigger"
+            [attr.aria-label]="'Ampliar: ' + image.alt"
+            (click)="openLightbox(index, thumbnail)"
+          >
+            <picture>
+              <source [srcset]="image.webpSrc" type="image/webp" />
+              <img
+                [src]="image.jpegSrc"
+                [alt]="image.alt"
+                [width]="image.width"
+                [height]="image.height"
+                [style.object-position]="image.objectPosition"
+                loading="lazy"
+                decoding="async"
+              />
+            </picture>
+            <span class="gallery-action" aria-hidden="true">↗</span>
+          </button>
+          <figcaption class="sr-only">{{ image.caption }}</figcaption>
         </figure>
       }
     </div>
   </div>
 </section>
+
+<dialog
+  #lightbox
+  class="lightbox"
+  aria-labelledby="lightbox-caption"
+  aria-describedby="lightbox-counter"
+  (keydown)="handleKeydown($event)"
+  (cancel)="handleCancel($event)"
+  (click)="closeFromBackdrop($event)"
+>
+  @if (activeImage(); as image) {
+    <div
+      class="lightbox-panel"
+      animate.enter="lightbox-panel-enter"
+      animate.leave="lightbox-panel-leave"
+      (animate.leave)="finishClose($event)"
+      (pointerdown)="startTouch($event)"
+      (pointerup)="endTouch($event)"
+    >
+      <button
+        #closeButton
+        class="lightbox-close"
+        type="button"
+        aria-label="Fechar galeria ampliada"
+        (click)="closeLightbox()"
+      >
+        ×
+      </button>
+      <button
+        class="lightbox-nav lightbox-nav--previous"
+        type="button"
+        aria-label="Imagem anterior"
+        (click)="previous()"
+      >
+        ‹
+      </button>
+      <picture class="lightbox-media">
+        <source [srcset]="image.webpSrc" type="image/webp" />
+        <img
+          [src]="image.jpegSrc"
+          [alt]="image.alt"
+          [width]="image.width"
+          [height]="image.height"
+          decoding="async"
+        />
+      </picture>
+      <button
+        class="lightbox-nav lightbox-nav--next"
+        type="button"
+        aria-label="Próxima imagem"
+        (click)="next()"
+      >
+        ›
+      </button>
+      <div class="lightbox-meta">
+        <p id="lightbox-caption">{{ image.caption }}</p>
+        <p id="lightbox-counter" aria-live="polite">
+          {{ activeIndex()! + 1 }} de {{ images().length }}
+        </p>
+      </div>
+    </div>
+  }
+</dialog>

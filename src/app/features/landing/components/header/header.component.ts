@@ -8,30 +8,42 @@ import {
   ViewChild,
   inject,
   input,
-  signal
+  signal,
 } from '@angular/core';
 import type { NavigationItem } from '../../../../core/models/navigation-item.model';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrl: './header.component.scss'
+  styleUrl: './header.component.scss',
 })
 export class HeaderComponent implements AfterViewInit, OnDestroy {
   private readonly document = inject(DOCUMENT);
   private sectionObserver?: IntersectionObserver;
+  private scrollStateObserver?: IntersectionObserver;
 
   @ViewChild('menuButton') private menuButton?: ElementRef<HTMLButtonElement>;
 
   readonly companyName = input.required<string>();
   readonly logoPath = input.required<string>();
+  readonly logoSrcSet = input.required<string>();
   readonly navigation = input.required<readonly NavigationItem[]>();
   protected readonly menuOpen = signal(false);
   protected readonly scrolled = signal(false);
   protected readonly activeSection = signal('inicio');
 
   ngAfterViewInit(): void {
+    this.onHashChange();
     if (typeof IntersectionObserver === 'undefined') return;
+
+    const scrollSentinel = this.document.getElementById('header-scroll-sentinel');
+    if (scrollSentinel) {
+      this.scrollStateObserver = new IntersectionObserver(
+        ([entry]) => this.scrolled.set(!entry.isIntersecting),
+        { rootMargin: '-24px 0px 0px 0px', threshold: 0 },
+      );
+      this.scrollStateObserver.observe(scrollSentinel);
+    }
 
     this.sectionObserver = new IntersectionObserver(
       (entries) => {
@@ -40,7 +52,7 @@ export class HeaderComponent implements AfterViewInit, OnDestroy {
           .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
         if (visible) this.activeSection.set(visible.target.id);
       },
-      { rootMargin: '-20% 0px -60% 0px', threshold: [0.05, 0.25, 0.5] }
+      { rootMargin: '-20% 0px -60% 0px', threshold: [0.05, 0.25, 0.5] },
     );
 
     for (const item of this.navigation()) {
@@ -51,12 +63,14 @@ export class HeaderComponent implements AfterViewInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.sectionObserver?.disconnect();
+    this.scrollStateObserver?.disconnect();
     this.document.body.classList.remove('menu-open');
   }
 
-  @HostListener('window:scroll')
-  protected onScroll(): void {
-    this.scrolled.set((this.document.defaultView?.scrollY ?? 0) > 24);
+  @HostListener('window:hashchange')
+  protected onHashChange(): void {
+    const id = this.document.defaultView?.location.hash.slice(1);
+    if (id) this.activeSection.set(id);
   }
 
   @HostListener('document:keydown.escape')

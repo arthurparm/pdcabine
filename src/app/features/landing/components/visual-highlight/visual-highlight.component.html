@@ -1,33 +1,72 @@
 <section class="spotlight" aria-labelledby="spotlight-title">
   <div class="container spotlight-grid">
-    <div class="spotlight-media">
-      <picture>
-        <source [srcset]="image().webpSrc" type="image/webp" />
-        <img
-          [src]="image().jpegSrc"
-          [alt]="image().alt"
-          [width]="image().width"
-          [height]="image().height"
-          loading="lazy"
-          decoding="async"
-        />
-      </picture>
+    <div
+      class="spotlight-media"
+      aria-label="Lembranças personalizadas da PD Cabine"
+      appReveal="scale"
+    >
+      <figure class="editorial-photo editorial-photo--primary">
+        <picture>
+          <source [srcset]="images().primary.webpSrc" type="image/webp" />
+          <img
+            [src]="images().primary.jpegSrc"
+            [alt]="images().primary.alt"
+            [width]="images().primary.width"
+            [height]="images().primary.height"
+            [style.object-position]="images().primary.objectPosition"
+            loading="lazy"
+            decoding="async"
+          />
+        </picture>
+      </figure>
+      <figure class="editorial-photo editorial-photo--secondary">
+        <picture>
+          <source [srcset]="images().secondary.webpSrc" type="image/webp" />
+          <img
+            [src]="images().secondary.jpegSrc"
+            [alt]="images().secondary.alt"
+            [width]="images().secondary.width"
+            [height]="images().secondary.height"
+            [style.object-position]="images().secondary.objectPosition"
+            loading="lazy"
+            decoding="async"
+          />
+        </picture>
+      </figure>
+      <figure class="editorial-photo editorial-photo--tertiary">
+        <picture>
+          <source [srcset]="images().tertiary.webpSrc" type="image/webp" />
+          <img
+            [src]="images().tertiary.jpegSrc"
+            [alt]="images().tertiary.alt"
+            [width]="images().tertiary.width"
+            [height]="images().tertiary.height"
+            [style.object-position]="images().tertiary.objectPosition"
+            loading="lazy"
+            decoding="async"
+          />
+        </picture>
+      </figure>
       <span class="orbit" aria-hidden="true"></span>
     </div>
 
-    <div class="spotlight-copy">
-      <p class="eyebrow">Em movimento</p>
-      <h2 id="spotlight-title">A experiência vira parte da festa.</h2>
+    <div class="spotlight-copy" appReveal="up" [revealDelay]="120">
+      <p class="eyebrow">Feita para participar</p>
+      <h2 id="spotlight-title"><span>Mais do que uma foto.</span> Uma parte da festa.</h2>
       <p>
-        Luz, vídeo e interação entram em cena sem interromper o evento. Cada detalhe pode acompanhar
-        a identidade da celebração — da moldura à entrega final.
+        A experiência acontece no momento do registro: os convidados escolhem acessórios, criam
+        poses, recebem as imagens e levam uma lembrança personalizada para casa.
       </p>
       <ul>
-        <li><span aria-hidden="true">✦</span> Identidade visual personalizada</li>
-        <li><span aria-hidden="true">✦</span> Operação acompanhada no evento</li>
-        <li><span aria-hidden="true">✦</span> Conteúdo pronto para compartilhar</li>
+        <li><span aria-hidden="true">✦</span> Personalização da moldura</li>
+        <li><span aria-hidden="true">✦</span> Impressão durante o evento</li>
+        <li><span aria-hidden="true">✦</span> Acessórios para as fotos</li>
+        <li><span aria-hidden="true">✦</span> Equipe de apoio</li>
+        <li>
+          <span aria-hidden="true">✦</span> Opções para casamentos, aniversários e eventos
+          corporativos
+        </li>
       </ul>
-      <a class="text-link" href="#orcamento">Criar uma experiência sob medida <span aria-hidden="true">→</span></a>
     </div>
   </div>
 </section>

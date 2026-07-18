@@ -15,7 +15,8 @@ describe('SITE_CONFIG', () => {
 
     expect(new Set(navigationIds).size).toBe(navigationIds.length);
     expect(new Set(serviceIds).size).toBe(serviceIds.length);
-    expect(SITE_CONFIG.services).toHaveLength(10);
+    expect(SITE_CONFIG.services).toHaveLength(7);
+    expect(SITE_CONFIG.services.every((service) => SITE_CONFIG.gallery.some((image) => image.id === service.imageId))).toBe(true);
   });
 
   it('references both optimized and fallback formats for every photograph', () => {
@@ -23,6 +24,8 @@ describe('SITE_CONFIG', () => {
     expect(SITE_CONFIG.gallery.every((image) => image.jpegSrc.endsWith('.jpeg'))).toBe(true);
     expect(SITE_CONFIG.gallery.every((image) => image.webpSrc.endsWith('.webp'))).toBe(true);
     expect(SITE_CONFIG.gallery.every((image) => image.width > 0 && image.height > 0)).toBe(true);
+    expect(SITE_CONFIG.gallery.every((image) => image.alt.length > 20 && image.caption.length > 20)).toBe(true);
+    expect(SITE_CONFIG.gallery.every((image) => image.objectPosition.length > 0)).toBe(true);
   });
 
   it('keeps the supplied public social proof in central configuration', () => {

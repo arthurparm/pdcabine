@@ -1,30 +1,51 @@
 <footer class="footer">
   <div class="container footer-grid">
     <div class="footer-brand">
-      <img [src]="config().logoPath" width="64" height="64" alt="" />
+      <img
+        [src]="config().logoPath"
+        [srcset]="config().logoSrcSet"
+        sizes="72px"
+        width="72"
+        height="72"
+        [alt]="'Logo da ' + config().companyName"
+      />
       <div>
         <strong>{{ config().companyName }}</strong>
         <p>{{ config().slogan }}</p>
       </div>
     </div>
 
-    <div>
-      <h2>Institucional</h2>
-      <p>{{ config().institutionalName }}</p>
-      <p>CNPJ {{ config().cnpj }}</p>
-      <p>Atendimento em {{ config().serviceRegion }}</p>
-    </div>
+    <nav aria-label="Navegação do rodapé">
+      <h2>Navegação</h2>
+      <ul>
+        @for (item of config().navigation; track item.id) {
+          <li>
+            <a [href]="item.href">{{ item.label }}</a>
+          </li>
+        }
+      </ul>
+    </nav>
 
     <div>
-      <h2>Conecte-se</h2>
+      <h2>Contato</h2>
       <ul>
-        @for (link of config().socialLinks; track link.kind) {
-          <li><a [href]="link.url" target="_blank" rel="noopener noreferrer">{{ link.label }}</a></li>
-        }
+        <li>
+          <a [href]="config().instagram.url" target="_blank" rel="noopener noreferrer"
+            >Instagram {{ config().instagram.handle }}</a
+          >
+        </li>
+        <li>
+          <a [href]="config().whatsapp.url" target="_blank" rel="noopener noreferrer"
+            >WhatsApp {{ config().whatsapp.display }}</a
+          >
+        </li>
+        <li>Atendimento em {{ config().serviceRegion }}</li>
+        <li>CNPJ: {{ config().cnpj }}</li>
       </ul>
     </div>
   </div>
   <div class="container footer-bottom">
+    <p>PD Cabine — Capturando momentos, criando memórias.</p>
     <small>© {{ currentYear }} {{ config().companyName }}. Todos os direitos reservados.</small>
   </div>
 </footer>

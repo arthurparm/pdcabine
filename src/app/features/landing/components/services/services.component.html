@@ -1,18 +1,49 @@
-<section id="experiencias" class="section section--surface" aria-labelledby="services-title">
+<section id="experiencias" class="section services" aria-labelledby="services-title">
   <div class="container">
-    <div class="section-heading">
-      <p class="eyebrow">Soluções para cada celebração</p>
-      <h2 id="services-title">Experiências que convidam todo mundo a participar</h2>
-      <p>Fotografia, vídeo e lembranças físicas combinados no ritmo e na identidade do seu evento.</p>
+    <div class="section-heading" appReveal="up">
+      <p class="eyebrow">Experiências PD Cabine</p>
+      <h2 id="services-title">Uma experiência para cada tipo de evento</h2>
+      <p>
+        De celebrações intimistas a grandes festas, a PD Cabine combina fotografia, vídeo,
+        personalização e entretenimento para manter os convidados envolvidos do início ao fim.
+      </p>
     </div>
 
     <ul class="services-grid">
       @for (service of services(); track service.id; let index = $index) {
-        <li>
-          <span class="service-index" aria-hidden="true">{{ (index + 1).toString().padStart(2, '0') }}</span>
-          <h3>{{ service.name }}</h3>
-          <p>{{ service.summary }}</p>
-        </li>
+        @if (imageFor(service); as image) {
+          <li
+            class="service-card"
+            appReveal="up"
+            [revealDelay]="(index % 3) * 90"
+            [appPointerTilt]="3"
+          >
+            <div class="service-card__media">
+              <picture>
+                <source [srcset]="image.webpSrc" type="image/webp" />
+                <img
+                  [src]="image.jpegSrc"
+                  [alt]="image.alt"
+                  [width]="image.width"
+                  [height]="image.height"
+                  [style.object-position]="image.objectPosition"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </picture>
+              <span class="service-index" aria-hidden="true">{{
+                (index + 1).toString().padStart(2, '0')
+              }}</span>
+            </div>
+            <div class="service-card__body">
+              <h3>{{ service.name }}</h3>
+              <p>{{ service.summary }}</p>
+              <a href="#orcamento" (click)="selectService(service.id)"
+                >Quero esta experiência <span aria-hidden="true">→</span></a
+              >
+            </div>
+          </li>
+        }
       }
     </ul>
   </div>

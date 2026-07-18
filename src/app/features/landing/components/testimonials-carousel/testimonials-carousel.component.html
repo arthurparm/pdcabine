@@ -1,23 +1,142 @@
-<section id="avaliacoes" class="section reviews" aria-labelledby="reviews-title">
-  <div class="container reviews-grid">
-    <div class="reviews-score">
-      <p class="score">{{ rating() }}</p>
-      <p class="stars" aria-label="5 de 5 estrelas">★★★★★</p>
-      <p>com base em {{ reviewCount() }} avaliações públicas</p>
-    </div>
+<section
+  id="avaliacoes"
+  class="section reviews"
+  role="region"
+  aria-roledescription="carousel"
+  aria-label="Avaliações públicas de clientes da PD Cabine"
+  aria-labelledby="reviews-title"
+  tabindex="0"
+  (keydown)="handleKeydown($event)"
+  (mouseenter)="isHovered.set(true)"
+  (mouseleave)="isHovered.set(false)"
+  (focusin)="hasFocusWithin.set(true)"
+  (focusout)="hasFocusWithin.set(false)"
+>
+  <div class="container">
+    <header class="reviews-header" appReveal="up">
+      <div class="section-heading">
+        <p class="eyebrow">Avaliações verificáveis</p>
+        <h2 id="reviews-title">Quem viveu, recomenda</h2>
+        <p>
+          Casais e anfitriões destacam a qualidade das fotos, a pontualidade, o atendimento e a
+          participação dos convidados.
+        </p>
+      </div>
 
-    <div class="reviews-copy">
-      <p class="eyebrow">Escolha de quem celebra</p>
-      <h2 id="reviews-title">Experiências recomendadas, memórias compartilhadas.</h2>
-      <p>
-        Atendimento próximo, personalização e uma operação pensada para que os convidados aproveitem
-        a experiência do começo ao fim.
-      </p>
-      <div class="recommendation">
-        <span aria-hidden="true">✓</span>
-        <strong>{{ recommendationRate() }} de recomendação</strong>
-        <small>na plataforma pública de avaliações</small>
+      <ul class="proof-list" aria-label="Indicadores públicos da PD Cabine">
+        <li>
+          <strong>{{ rating() }} de 5</strong><span>média pública</span>
+        </li>
+        <li>
+          <strong>{{ reviewCount() }} avaliações públicas</strong><span>na plataforma</span>
+        </li>
+        <li>
+          <strong>{{ recommendationRate() }} de recomendação</strong><span>dos clientes</span>
+        </li>
+        <li><strong>Mais de 350 casais</strong><span>contrataram</span></li>
+        <li><strong>2022 a 2026</strong><span>Casamentos Awards</span></li>
+      </ul>
+    </header>
+
+    <div
+      class="carousel-viewport"
+      appReveal="fade"
+      [revealDelay]="100"
+      (pointerdown)="handlePointerDown($event)"
+      (pointerup)="handlePointerUp($event)"
+      (pointercancel)="cancelPointer()"
+      (lostpointercapture)="cancelPointer()"
+    >
+      <div
+        class="carousel-track"
+        [style.--visible-count]="visibleCount()"
+        [style.transform]="trackTransform()"
+      >
+        @for (review of reviews; track review.id; let reviewIndex = $index) {
+          <article
+            class="review-card"
+            role="group"
+            aria-roledescription="slide"
+            [attr.aria-label]="'Avaliação ' + (reviewIndex + 1) + ' de ' + reviews.length"
+            [attr.aria-hidden]="isVisible(reviewIndex) ? null : 'true'"
+            [class.review-card--highlighted]="isHighlighted(reviewIndex)"
+          >
+            <span class="quote-mark" aria-hidden="true">“</span>
+            <div class="reviewer">
+              <span class="reviewer-avatar" aria-hidden="true">{{ review.author.charAt(0) }}</span>
+              <div>
+                <h3>{{ review.author }}</h3>
+                <p>{{ review.context }}</p>
+              </div>
+            </div>
+            <p class="stars" [attr.aria-label]="review.rating + ' de 5 estrelas'">
+              <span aria-hidden="true">★★★★★</span>
+            </p>
+            <blockquote>{{ review.summary }}</blockquote>
+            <p class="review-source">
+              <span class="source-mark" aria-hidden="true">C</span>
+              Resumo de avaliação pública — Casamentos.com.br
+            </p>
+          </article>
+        }
       </div>
     </div>
+
+    <div class="carousel-footer">
+      <div class="carousel-controls" aria-label="Controles das avaliações">
+        <button
+          type="button"
+          class="carousel-button"
+          aria-label="Mostrar avaliações anteriores"
+          [disabled]="currentPage() === 0"
+          (click)="previous()"
+        >
+          <span aria-hidden="true">←</span>
+        </button>
+        <div class="carousel-indicators" aria-label="Páginas de avaliações">
+          @for (start of pageStarts(); track start; let page = $index) {
+            <button
+              type="button"
+              [class.is-active]="page === currentPage()"
+              [attr.aria-current]="page === currentPage() ? 'true' : null"
+              [attr.aria-label]="indicatorLabel(page)"
+              (click)="goToPage(page)"
+            ></button>
+          }
+        </div>
+        <button
+          type="button"
+          class="carousel-button"
+          aria-label="Mostrar próximas avaliações"
+          [disabled]="currentPage() === pageStarts().length - 1"
+          (click)="next()"
+        >
+          <span aria-hidden="true">→</span>
+        </button>
+        <button
+          type="button"
+          class="autoplay-button"
+          [attr.aria-label]="
+            isUserPaused() ? 'Retomar rotação automática' : 'Pausar rotação automática'
+          "
+          [attr.aria-pressed]="isUserPaused()"
+          (click)="toggleAutoplay()"
+        >
+          <span aria-hidden="true">{{ isUserPaused() ? '▶' : 'Ⅱ' }}</span>
+          {{ isUserPaused() ? 'Retomar' : 'Pausar' }}
+        </button>
+      </div>
+
+      <a
+        class="reviews-link"
+        href="https://www.casamentos.com.br/cabine-de-fotos/pd-cabine--e269740"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Ver todas as avaliações <span aria-hidden="true">↗</span>
+      </a>
+    </div>
+
+    <p class="sr-only" role="status" aria-live="polite" aria-atomic="true">{{ statusMessage() }}</p>
   </div>
 </section>

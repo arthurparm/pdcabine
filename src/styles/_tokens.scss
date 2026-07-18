@@ -22,7 +22,11 @@
   --gradient-brand: linear-gradient(125deg, #d919c9 0%, #bc277b 45%, #e15c32 100%);
   --gradient-brand-soft: linear-gradient(135deg, rgb(215 63 223 / 12%), rgb(199 90 59 / 8%));
   --gradient-glow-top: radial-gradient(circle at top left, rgb(215 63 223 / 34%), transparent 42%);
-  --gradient-glow-bottom: radial-gradient(circle at bottom right, rgb(199 90 59 / 28%), transparent 46%);
+  --gradient-glow-bottom: radial-gradient(
+    circle at bottom right,
+    rgb(199 90 59 / 28%),
+    transparent 46%
+  );
 
   --radius-sm: 8px;
   --radius-md: 16px;
@@ -51,6 +55,14 @@
   --page-gutter: clamp(20px, 4vw, 48px);
   --duration-fast: 160ms;
   --duration-normal: 260ms;
-  --duration-slow: 420ms;
+  --duration-slow: 520ms;
+  --duration-reveal: 700ms;
+  --duration-ambient: 24s;
+  --duration-ambient-slow: 32s;
   --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-enter: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+  --ease-emphasized: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --reveal-distance: 18px;
+  --ambient-shift: 18px;
 }

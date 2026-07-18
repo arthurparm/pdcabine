@@ -52,14 +52,27 @@
   margin-top: var(--space-2);
 }
 
+.footer li {
+  color: #aa9ca7;
+  font-size: 0.92rem;
+}
+
 .footer-bottom {
+  display: flex;
+  gap: var(--space-4);
+  align-items: center;
+  justify-content: space-between;
   margin-top: var(--space-8);
   padding-top: var(--space-5);
   border-top: 1px solid var(--color-border);
 }
 
+.footer-bottom p { margin: 0; }
+
 @media (max-width: 680px) {
   .footer-grid {
     grid-template-columns: 1fr;
   }
+
+  .footer-bottom { align-items: flex-start; flex-direction: column; }
 }
