@@ -1,5 +1,4 @@
 import { Component, input } from '@angular/core';
-import type { Testimonial } from '../../../../core/models/testimonial.model';
 
 @Component({
   selector: 'app-testimonials-carousel',
@@ -7,5 +6,7 @@ import type { Testimonial } from '../../../../core/models/testimonial.model';
   styleUrl: './testimonials-carousel.component.scss'
 })
 export class TestimonialsCarouselComponent {
-  readonly testimonials = input.required<readonly Testimonial[]>();
+  readonly rating = input.required<string>();
+  readonly reviewCount = input.required<number>();
+  readonly recommendationRate = input.required<string>();
 }

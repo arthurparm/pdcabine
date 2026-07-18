@@ -1,12 +1,50 @@
-<section id="contato" class="section contact" aria-labelledby="contact-title">
-  <div class="container contact-panel">
-    <p class="eyebrow">Vamos planejar?</p>
-    <h2 id="contact-title">Conte sobre o seu evento.</h2>
-    <p>
-      A {{ companyName() }} atende {{ serviceRegion() }} com experiências pensadas para o formato da sua celebração.
-    </p>
-    <a class="button button--light" [href]="whatsappUrl()" target="_blank" rel="noopener noreferrer">
-      Conversar pelo WhatsApp
-    </a>
+<section id="orcamento" class="section contact" aria-labelledby="contact-title">
+  <div class="container contact-grid">
+    <div class="contact-copy">
+      <p class="eyebrow">Seu evento começa aqui</p>
+      <h2 id="contact-title">Vamos criar algo memorável?</h2>
+      <p>
+        Conte o essencial sobre a celebração. Ao enviar, abriremos uma conversa no WhatsApp com os
+        dados preenchidos para você revisar antes de mandar.
+      </p>
+      <a class="direct-link" [href]="whatsappUrl()" target="_blank" rel="noopener noreferrer">
+        Prefere ir direto ao WhatsApp? <strong>Fale com a equipe →</strong>
+      </a>
+    </div>
+
+    <form #budgetForm="ngForm" (ngSubmit)="submitBudget(budgetForm)" novalidate>
+      <div class="field">
+        <label for="budget-name">Seu nome</label>
+        <input id="budget-name" name="name" type="text" autocomplete="name" ngModel required #name="ngModel" />
+        @if (name.invalid && name.touched) { <small>Informe seu nome.</small> }
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="event-type">Tipo de evento</label>
+          <select id="event-type" name="eventType" ngModel required #eventType="ngModel">
+            <option value="" disabled>Selecione</option>
+            <option>Casamento</option>
+            <option>Aniversário</option>
+            <option>Evento corporativo</option>
+            <option>Formatura</option>
+            <option>Outro evento</option>
+          </select>
+          @if (eventType.invalid && eventType.touched) { <small>Selecione o tipo de evento.</small> }
+        </div>
+        <div class="field">
+          <label for="event-date">Data <span>(opcional)</span></label>
+          <input id="event-date" name="eventDate" type="date" ngModel />
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="budget-message">Conte um pouco sobre o evento <span>(opcional)</span></label>
+        <textarea id="budget-message" name="message" rows="4" ngModel></textarea>
+      </div>
+
+      <button class="button button--light" type="submit">Solicitar orçamento pelo WhatsApp</button>
+      <p class="privacy-note">Nenhum dado é armazenado neste site.</p>
+    </form>
   </div>
 </section>

@@ -4,28 +4,32 @@
   [companyName]="config.companyName"
   [logoPath]="config.logoPath"
   [navigation]="config.navigation"
-  [whatsappUrl]="config.whatsapp.url"
 />
 
 <main id="conteudo-principal">
   <app-hero
     [companyName]="config.companyName"
-    [slogan]="config.slogan"
     [serviceRegion]="config.serviceRegion"
-    [whatsappUrl]="config.whatsapp.url"
-    [heroImage]="heroImage"
+    [logoPath]="config.logoPath"
+    [images]="heroImages"
   />
-  <app-services [services]="config.services" />
-  <app-experience-gallery [images]="config.gallery" />
   <app-social-proof
     [metrics]="config.socialProof.metrics"
-    [verificationDate]="config.socialProof.verification.verifiedAt"
+    [verificationDate]="config.socialProof.verification.displayLabel"
   />
-  <app-testimonials-carousel [testimonials]="config.socialProof.testimonials" />
+  <app-services [services]="config.services" />
+  <app-visual-highlight [image]="config.gallery[5]" />
+  <app-experience-gallery [images]="config.gallery" />
+  <app-testimonials-carousel
+    [rating]="config.socialProof.rating"
+    [reviewCount]="config.socialProof.reviewCount"
+    [recommendationRate]="config.socialProof.recommendationRate"
+  />
   <app-contact-section
     [companyName]="config.companyName"
     [serviceRegion]="config.serviceRegion"
     [whatsappUrl]="config.whatsapp.url"
+    [whatsappNumber]="config.whatsapp.normalized"
   />
 </main>
 

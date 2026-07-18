@@ -1,18 +1,20 @@
-<header class="site-header">
+<header class="site-header" [class.site-header--scrolled]="scrolled()" [class.site-header--menu-open]="menuOpen()">
   <div class="container header-content">
     <a class="brand" href="#inicio" (click)="closeMenu()" [attr.aria-label]="companyName() + ' — início'">
       <img [src]="logoPath()" width="56" height="56" alt="" />
-      <span>{{ companyName() }}</span>
+      <span class="brand-name">{{ companyName() }}</span>
     </a>
 
     <button
       class="menu-button"
+      #menuButton
       type="button"
       aria-controls="primary-navigation"
       [attr.aria-expanded]="menuOpen()"
+      [attr.aria-label]="menuOpen() ? 'Fechar menu' : 'Abrir menu'"
+      [class.menu-button--open]="menuOpen()"
       (click)="toggleMenu()"
     >
-      <span class="sr-only">Abrir ou fechar menu</span>
       <span aria-hidden="true"></span>
       <span aria-hidden="true"></span>
       <span aria-hidden="true"></span>
@@ -26,12 +28,22 @@
     >
       <ul>
         @for (item of navigation(); track item.id) {
-          <li><a [href]="item.href" (click)="closeMenu()">{{ item.label }}</a></li>
+          <li>
+            <a
+              [href]="item.href"
+              [class.navigation__link--active]="activeSection() === item.id"
+              [attr.aria-current]="activeSection() === item.id ? 'location' : null"
+              (click)="closeMenu()"
+            >{{ item.label }}</a>
+          </li>
         }
       </ul>
-      <a class="button button--compact" [href]="whatsappUrl()" target="_blank" rel="noopener noreferrer">
-        Pedir orçamento
+      <a class="button button--compact" href="#orcamento" (click)="closeMenu()">
+        Solicitar orçamento
       </a>
     </nav>
   </div>
 </header>
+@if (menuOpen()) {
+  <button class="menu-backdrop" type="button" aria-label="Fechar menu" (click)="closeMenu(true)"></button>
+}

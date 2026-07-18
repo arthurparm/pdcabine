@@ -1,42 +1,57 @@
-.proof-panel {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--space-7);
-  align-items: center;
-}
-
-.proof-panel h2 {
-  max-width: 18ch;
-  margin: var(--space-3) 0 0;
-  font-size: clamp(1.75rem, 4vw, 3rem);
-}
-
-.empty-state {
-  margin: 0;
-  padding: var(--space-6);
-  border: 1px dashed rgb(231 226 225 / 24%);
-  border-radius: var(--radius-lg);
-  color: var(--color-text-secondary);
-}
-
-.verification {
-  grid-column: 1 / -1;
-  margin: 0;
-  color: var(--color-text-muted);
-  font-size: 0.8rem;
+.social-proof {
+  position: relative;
+  z-index: 4;
+  padding: var(--space-7) 0;
+  border-bottom: 1px solid var(--color-border);
+  background: linear-gradient(105deg, #fff, #f2eced 48%, #fff8f2);
+  box-shadow: 0 -12px 36px rgb(5 1 7 / 14%);
 }
 
 .metrics {
-  display: flex;
-  gap: var(--space-6);
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  margin: 0;
 }
 
-@media (max-width: 680px) {
-  .proof-panel {
-    grid-template-columns: 1fr;
-  }
+.metrics > div {
+  min-width: 0;
+  padding: var(--space-3) var(--space-5);
+  border-right: 1px solid var(--color-border);
+  text-align: center;
+}
 
-  .verification {
-    grid-column: auto;
-  }
+.metrics > div:last-child { border-right: 0; }
+
+.metrics dd {
+  margin: 0 0 var(--space-1);
+  background: var(--gradient-brand);
+  background-clip: text;
+  color: transparent;
+  font-size: clamp(1.45rem, 2.5vw, 2.25rem);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.metrics dt {
+  color: var(--color-text-secondary);
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.verification {
+  margin: var(--space-5) 0 0;
+  color: var(--color-text-muted);
+  font-size: 0.75rem;
+  text-align: center;
+}
+
+.verification span { color: #39a56a; font-size: 0.58rem; }
+
+@media (max-width: 800px) {
+  .metrics { grid-template-columns: repeat(2, 1fr); }
+  .metrics > div { padding: var(--space-4); border-bottom: 1px solid var(--color-border); }
+  .metrics > div:nth-child(even) { border-right: 0; }
+  .metrics > div:last-child { grid-column: 1 / -1; border-bottom: 0; }
 }

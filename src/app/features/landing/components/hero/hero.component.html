@@ -1,30 +1,77 @@
 <section id="inicio" class="hero" aria-labelledby="hero-title">
+  <span class="hero-glow hero-glow--one" aria-hidden="true"></span>
+  <span class="hero-glow hero-glow--two" aria-hidden="true"></span>
+  <span class="light-trace" aria-hidden="true"></span>
+  <span class="spark spark--one" aria-hidden="true">✦</span>
+  <span class="spark spark--two" aria-hidden="true">✦</span>
+
   <div class="container hero-grid">
     <div class="hero-copy">
-      <p class="eyebrow">Experiências fotográficas em {{ serviceRegion() }}</p>
-      <h1 id="hero-title">Seu evento merece memórias que continuam vivas.</h1>
-      <p class="hero-slogan">{{ slogan() }}</p>
+      <p class="eyebrow">Experiências fotográficas para eventos em {{ serviceRegion() }}</p>
+      <h1 id="hero-title">
+        <span>Capturando momentos,</span>
+        <span class="gradient-text">criando memórias.</span>
+      </h1>
+      <p class="hero-description">
+        Totens, cabines, espelho mágico, plataformas e experiências imersivas para transformar cada
+        celebração em uma lembrança inesquecível.
+      </p>
       <div class="hero-actions">
-        <a class="button" [href]="whatsappUrl()" target="_blank" rel="noopener noreferrer">
-          Solicitar orçamento
-        </a>
-        <a class="text-link" href="#servicos">Conhecer experiências <span aria-hidden="true">↓</span></a>
+        <a class="button" href="#orcamento">Solicitar orçamento</a>
+        <a class="button button--outline" href="#experiencias">Conhecer experiências</a>
       </div>
-      <p class="hero-note">{{ companyName() }} · Atendimento para eventos sociais e corporativos</p>
+
+      <ul class="benefits" aria-label="Benefícios">
+        <li><span aria-hidden="true">✓</span> Fotos reveladas na hora</li>
+        <li><span aria-hidden="true">✓</span> Molduras personalizadas</li>
+        <li><span aria-hidden="true">✓</span> Experiências para todas as idades</li>
+      </ul>
     </div>
 
-    <div class="hero-media">
-      <picture>
-        <source [srcset]="heroImage().webpSrc" type="image/webp" />
+    <div class="hero-media" aria-label="Experiências da PD Cabine em eventos">
+      <figure class="photo photo--primary">
         <img
-          [src]="heroImage().jpegSrc"
-          [alt]="heroImage().alt"
-          [width]="heroImage().width"
-          [height]="heroImage().height"
-          fetchpriority="high"
+          [ngSrc]="images().primary.webpSrc"
+          [alt]="images().primary.alt"
+          [width]="images().primary.width"
+          [height]="images().primary.height"
+          priority
         />
-      </picture>
-      <div class="hero-badge" aria-hidden="true">Fotos na hora<br />memórias para sempre</div>
+      </figure>
+
+      <figure class="photo photo--secondary">
+        <picture>
+          <source [srcset]="images().secondary.webpSrc" type="image/webp" />
+          <img
+            [src]="images().secondary.jpegSrc"
+            [alt]="images().secondary.alt"
+            [width]="images().secondary.width"
+            [height]="images().secondary.height"
+            loading="lazy"
+            decoding="async"
+          />
+        </picture>
+      </figure>
+
+      <figure class="photo photo--tertiary">
+        <picture>
+          <source [srcset]="images().tertiary.webpSrc" type="image/webp" />
+          <img
+            [src]="images().tertiary.jpegSrc"
+            [alt]="images().tertiary.alt"
+            [width]="images().tertiary.width"
+            [height]="images().tertiary.height"
+            loading="lazy"
+            decoding="async"
+          />
+        </picture>
+      </figure>
+
+      <div class="brand-seal">
+        <img [src]="logoPath()" width="96" height="96" alt="" />
+        <span>{{ companyName() }}<br />momentos que ficam</span>
+      </div>
+      <span class="spiral" aria-hidden="true"></span>
     </div>
   </div>
 </section>

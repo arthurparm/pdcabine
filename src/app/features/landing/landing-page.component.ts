@@ -9,12 +9,14 @@ import { ServicesComponent } from './components/services/services.component';
 import { SocialProofComponent } from './components/social-proof/social-proof.component';
 import { TestimonialsCarouselComponent } from './components/testimonials-carousel/testimonials-carousel.component';
 import { WhatsappFloatingButtonComponent } from './components/whatsapp-floating-button/whatsapp-floating-button.component';
+import { VisualHighlightComponent } from './components/visual-highlight/visual-highlight.component';
 
 @Component({
   selector: 'app-landing-page',
   imports: [
     HeaderComponent,
     HeroComponent,
+    VisualHighlightComponent,
     ServicesComponent,
     ExperienceGalleryComponent,
     SocialProofComponent,
@@ -28,5 +30,9 @@ import { WhatsappFloatingButtonComponent } from './components/whatsapp-floating-
 })
 export class LandingPageComponent {
   protected readonly config = SITE_CONFIG;
-  protected readonly heroImage = SITE_CONFIG.gallery[1];
+  protected readonly heroImages = {
+    primary: SITE_CONFIG.gallery[8],
+    secondary: SITE_CONFIG.gallery[1],
+    tertiary: SITE_CONFIG.gallery[5]
+  };
 }

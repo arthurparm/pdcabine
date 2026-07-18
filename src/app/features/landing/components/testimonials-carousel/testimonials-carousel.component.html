@@ -1,24 +1,23 @@
-<section id="depoimentos" class="section" aria-labelledby="testimonials-title">
-  <div class="container">
-    <div class="section-heading">
-      <p class="eyebrow">Feedbacks</p>
-      <h2 id="testimonials-title">O evento pela perspectiva de quem viveu</h2>
+<section id="avaliacoes" class="section reviews" aria-labelledby="reviews-title">
+  <div class="container reviews-grid">
+    <div class="reviews-score">
+      <p class="score">{{ rating() }}</p>
+      <p class="stars" aria-label="5 de 5 estrelas">★★★★★</p>
+      <p>com base em {{ reviewCount() }} avaliações públicas</p>
     </div>
 
-    @if (testimonials().length > 0) {
-      <div class="testimonials" aria-label="Depoimentos de clientes">
-        @for (testimonial of testimonials(); track testimonial.id) {
-          <figure>
-            <blockquote>“{{ testimonial.quote }}”</blockquote>
-            <figcaption>{{ testimonial.author }} · {{ testimonial.eventType }}</figcaption>
-          </figure>
-        }
+    <div class="reviews-copy">
+      <p class="eyebrow">Escolha de quem celebra</p>
+      <h2 id="reviews-title">Experiências recomendadas, memórias compartilhadas.</h2>
+      <p>
+        Atendimento próximo, personalização e uma operação pensada para que os convidados aproveitem
+        a experiência do começo ao fim.
+      </p>
+      <div class="recommendation">
+        <span aria-hidden="true">✓</span>
+        <strong>{{ recommendationRate() }} de recomendação</strong>
+        <small>na plataforma pública de avaliações</small>
       </div>
-    } @else {
-      <div class="empty-testimonials" role="status">
-        <span aria-hidden="true">✦</span>
-        <p>Depoimentos autorizados serão publicados aqui. Nenhuma avaliação foi inventada.</p>
-      </div>
-    }
+    </div>
   </div>
 </section>

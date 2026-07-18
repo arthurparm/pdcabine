@@ -17,6 +17,7 @@ export interface SocialProofMetric {
 
 export interface PublicDataVerification {
   readonly verifiedAt: string;
+  readonly displayLabel: string;
   readonly registryStatus: 'active';
   readonly registryCity: string;
   readonly registryState: string;
@@ -46,6 +47,9 @@ export interface SiteConfig {
   readonly services: readonly Service[];
   readonly gallery: readonly GalleryImage[];
   readonly socialProof: {
+    readonly rating: string;
+    readonly reviewCount: number;
+    readonly recommendationRate: string;
     readonly metrics: readonly SocialProofMetric[];
     readonly testimonials: readonly Testimonial[];
     readonly verification: PublicDataVerification;
@@ -87,10 +91,10 @@ export const SITE_CONFIG = {
   ],
   navigation: [
     { id: 'inicio', label: 'Início', href: '#inicio' },
-    { id: 'servicos', label: 'Serviços', href: '#servicos' },
     { id: 'experiencias', label: 'Experiências', href: '#experiencias' },
-    { id: 'depoimentos', label: 'Depoimentos', href: '#depoimentos' },
-    { id: 'contato', label: 'Contato', href: '#contato' }
+    { id: 'galeria', label: 'Galeria', href: '#galeria' },
+    { id: 'avaliacoes', label: 'Avaliações', href: '#avaliacoes' },
+    { id: 'orcamento', label: 'Orçamento', href: '#orcamento' }
   ],
   services: [
     { id: 'totem-fotografico', name: 'Totem fotográfico', summary: 'Fotos personalizadas e impressas durante o evento.' },
@@ -117,10 +121,20 @@ export const SITE_CONFIG = {
     { id: 'caderno-assinaturas', jpegSrc: `${ASSET_PATH}/caderno-de-assinaturas.jpeg`, webpSrc: `${ASSET_PATH}/caderno-de-assinaturas.webp`, alt: 'Caderno de assinaturas e canetas sobre uma mesa decorada', width: 1200, height: 1600, serviceId: 'caderno-assinaturas' }
   ],
   socialProof: {
-    metrics: [],
+    rating: '5,0',
+    reviewCount: 246,
+    recommendationRate: '100%',
+    metrics: [
+      { value: '5,0', label: 'Nota média', source: 'Plataforma pública de avaliações' },
+      { value: '246', label: 'avaliações públicas', source: 'Plataforma pública de avaliações' },
+      { value: '+350', label: 'casais contrataram', source: 'Histórico público da empresa' },
+      { value: '2022–2026', label: 'Casamentos Awards', source: 'Casamentos.com.br' },
+      { value: '100%', label: 'de recomendação', source: 'Plataforma pública de avaliações' }
+    ],
     testimonials: [],
     verification: {
       verifiedAt: '2026-07-18',
+      displayLabel: 'julho de 2026',
       registryStatus: 'active',
       registryCity: 'São Paulo',
       registryState: 'SP',

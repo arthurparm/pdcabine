@@ -1,0 +1,33 @@
+<section class="spotlight" aria-labelledby="spotlight-title">
+  <div class="container spotlight-grid">
+    <div class="spotlight-media">
+      <picture>
+        <source [srcset]="image().webpSrc" type="image/webp" />
+        <img
+          [src]="image().jpegSrc"
+          [alt]="image().alt"
+          [width]="image().width"
+          [height]="image().height"
+          loading="lazy"
+          decoding="async"
+        />
+      </picture>
+      <span class="orbit" aria-hidden="true"></span>
+    </div>
+
+    <div class="spotlight-copy">
+      <p class="eyebrow">Em movimento</p>
+      <h2 id="spotlight-title">A experiência vira parte da festa.</h2>
+      <p>
+        Luz, vídeo e interação entram em cena sem interromper o evento. Cada detalhe pode acompanhar
+        a identidade da celebração — da moldura à entrega final.
+      </p>
+      <ul>
+        <li><span aria-hidden="true">✦</span> Identidade visual personalizada</li>
+        <li><span aria-hidden="true">✦</span> Operação acompanhada no evento</li>
+        <li><span aria-hidden="true">✦</span> Conteúdo pronto para compartilhar</li>
+      </ul>
+      <a class="text-link" href="#orcamento">Criar uma experiência sob medida <span aria-hidden="true">→</span></a>
+    </div>
+  </div>
+</section>

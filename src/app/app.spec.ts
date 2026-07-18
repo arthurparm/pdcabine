@@ -22,7 +22,7 @@ describe('App', () => {
     expect(page.querySelector('app-whatsapp-floating-button')).not.toBeNull();
   });
 
-  it('renders accessible navigation, heading order and empty testimonials', async () => {
+  it('renders accessible navigation, heading order and supplied public proof', async () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
     const page = fixture.nativeElement as HTMLElement;
@@ -33,9 +33,8 @@ describe('App', () => {
     expect(page.querySelector('nav')?.getAttribute('aria-label')).toBe('Navegação principal');
     expect(menuButton?.getAttribute('aria-expanded')).toBe('false');
     expect(headings[0]).toBe('H1');
-    expect(page.querySelector('#depoimentos [role="status"]')?.textContent).toContain(
-      'Nenhuma avaliação foi inventada'
-    );
+    expect(page.querySelector('#avaliacoes')?.textContent).toContain('246 avaliações públicas');
+    expect(page.querySelector('app-social-proof')?.textContent).toContain('2022–2026');
     expect(page.querySelector('.whatsapp-button')?.getAttribute('aria-label')).toContain('WhatsApp');
   });
 
@@ -50,5 +49,13 @@ describe('App', () => {
 
     expect(menuButton?.getAttribute('aria-expanded')).toBe('true');
     expect(page.querySelector('#primary-navigation')?.classList).toContain('navigation--open');
+    expect(document.body.classList).toContain('menu-open');
+
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+    fixture.detectChanges();
+
+    expect(menuButton?.getAttribute('aria-expanded')).toBe('false');
+    expect(document.body.classList).not.toContain('menu-open');
+    expect(document.activeElement).toBe(menuButton);
   });
 });

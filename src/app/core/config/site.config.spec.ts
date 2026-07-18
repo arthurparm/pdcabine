@@ -25,8 +25,10 @@ describe('SITE_CONFIG', () => {
     expect(SITE_CONFIG.gallery.every((image) => image.width > 0 && image.height > 0)).toBe(true);
   });
 
-  it('does not publish unverified social proof', () => {
-    expect(SITE_CONFIG.socialProof.metrics).toHaveLength(0);
+  it('keeps the supplied public social proof in central configuration', () => {
+    expect(SITE_CONFIG.socialProof.metrics).toHaveLength(5);
+    expect(SITE_CONFIG.socialProof.rating).toBe('5,0');
+    expect(SITE_CONFIG.socialProof.reviewCount).toBe(246);
     expect(SITE_CONFIG.socialProof.testimonials).toHaveLength(0);
     expect(SITE_CONFIG.socialProof.verification.verifiedAt).toBe('2026-07-18');
   });
