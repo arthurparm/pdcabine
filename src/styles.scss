@@ -116,6 +116,58 @@ textarea:focus-visible {
   letter-spacing: 0.16em;
 }
 
+.animated-gradient-title {
+  --animated-title-gradient: linear-gradient(
+    90deg,
+    #9f168f,
+    var(--color-magenta),
+    var(--color-pink),
+    var(--color-orange),
+    #9f168f
+  );
+}
+
+.animated-gradient-title--dark {
+  --animated-title-gradient: linear-gradient(90deg, #ffd1f4, #ff78df, #ff9cec, #ff895d, #ffd1f4);
+}
+
+.animated-gradient-title--pink {
+  --animated-title-gradient: linear-gradient(
+    90deg,
+    #ffd1f4,
+    #ff9cec,
+    #f35ed1,
+    #d919c9,
+    #ff78df,
+    #ffd1f4
+  );
+  color: #ff9cec;
+}
+
+.animated-gradient-title--contact {
+  --animated-title-gradient: linear-gradient(90deg, #fff, #ffe5cf, #fff1fb, #ffd8ef, #fff);
+}
+
+@supports ((background-clip: text) or (-webkit-background-clip: text)) {
+  .animated-gradient-title {
+    background: var(--animated-title-gradient) 0 50% / 220% 100%;
+    background-clip: text;
+    color: transparent;
+    animation: chromatic-title-shift var(--duration-ambient) ease-in-out infinite;
+    -webkit-background-clip: text;
+  }
+
+  .animated-gradient-title > span {
+    color: inherit;
+  }
+}
+
+@keyframes chromatic-title-shift {
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
 .button {
   position: relative;
   display: inline-flex;
@@ -343,6 +395,53 @@ app-hero .hero-copy > :nth-child(5) {
   }
 }
 
+app-hero .brand-seal {
+  overflow: hidden;
+  background: linear-gradient(110deg, #f9f6f3, #a9a3a5 38%, #fff 50%, #c1babd 62%, #f9f6f3) 0 50% /
+    220% 100%;
+  animation:
+    seal-float 8s ease-in-out 1.2s infinite alternate,
+    seal-metal-shift var(--duration-ambient) ease-in-out infinite;
+}
+
+app-hero .brand-seal::after {
+  position: absolute;
+  z-index: 1;
+  width: 32%;
+  pointer-events: none;
+  content: '';
+  inset: -45% auto -45% -42%;
+  background: linear-gradient(90deg, transparent, rgb(255 255 255 / 68%), transparent);
+  opacity: 0;
+  transform: skewX(-18deg) translate3d(0, 0, 0);
+  animation: seal-shine 12s var(--ease-standard) 2s infinite;
+}
+
+app-hero .brand-seal > img,
+app-hero .brand-seal > span {
+  position: relative;
+  z-index: 2;
+}
+
+@keyframes seal-metal-shift {
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes seal-shine {
+  12%,
+  28% {
+    opacity: 0.72;
+  }
+
+  36%,
+  100% {
+    opacity: 0;
+    transform: skewX(-18deg) translate3d(480%, 0, 0);
+  }
+}
+
 @keyframes decorative-float {
   to {
     translate: 4px -7px;
@@ -405,6 +504,61 @@ app-testimonials-carousel .reviews > .container {
   z-index: 1;
 }
 
+app-testimonials-carousel .proof-list {
+  transition:
+    transform var(--duration-normal) var(--ease-enter),
+    box-shadow var(--duration-normal) var(--ease-standard);
+}
+
+app-testimonials-carousel .proof-list li {
+  transition:
+    background-color var(--duration-normal) var(--ease-standard),
+    box-shadow var(--duration-normal) var(--ease-standard);
+}
+
+app-testimonials-carousel .proof-list strong {
+  transition: color var(--duration-normal) var(--ease-standard);
+}
+
+app-testimonials-carousel .review-card {
+  transition:
+    transform var(--duration-slow) var(--ease-standard),
+    opacity var(--duration-normal) var(--ease-standard),
+    box-shadow var(--duration-slow) var(--ease-standard);
+}
+
+app-testimonials-carousel .quote-mark {
+  transition:
+    color var(--duration-normal) var(--ease-standard),
+    opacity var(--duration-normal) var(--ease-standard),
+    transform var(--duration-slow) var(--ease-enter);
+}
+
+app-testimonials-carousel .reviewer-avatar {
+  transition:
+    transform var(--duration-normal) var(--ease-enter),
+    box-shadow var(--duration-normal) var(--ease-standard);
+}
+
+app-testimonials-carousel .stars {
+  transition:
+    color var(--duration-normal) var(--ease-standard),
+    text-shadow var(--duration-normal) var(--ease-standard),
+    transform var(--duration-normal) var(--ease-enter);
+}
+
+app-testimonials-carousel .reviews-link {
+  transition:
+    color var(--duration-normal) var(--ease-standard),
+    text-decoration-color var(--duration-normal) var(--ease-standard);
+}
+
+app-testimonials-carousel .reviews-link span {
+  display: inline-block;
+  margin-left: 0.3em;
+  transition: transform var(--duration-normal) var(--ease-enter);
+}
+
 app-testimonials-carousel :is(.carousel-button, .autoplay-button, .carousel-indicators button) {
   transition:
     transform var(--duration-fast) var(--ease-standard),
@@ -426,6 +580,61 @@ app-testimonials-carousel :is(.carousel-button, .autoplay-button, .carousel-indi
 }
 
 @media (hover: hover) and (pointer: fine) {
+  app-testimonials-carousel .proof-list:hover {
+    box-shadow: 0 18px 48px rgb(0 0 0 / 22%);
+    transform: translateY(-2px);
+  }
+
+  app-testimonials-carousel .proof-list li:hover {
+    background-color: rgb(52 25 48 / 94%);
+    box-shadow: inset 0 0 32px rgb(217 25 201 / 12%);
+  }
+
+  app-testimonials-carousel .proof-list li:hover strong {
+    color: #ffb2ec;
+  }
+
+  app-testimonials-carousel .review-card:hover {
+    z-index: 2;
+    box-shadow:
+      0 30px 76px rgb(0 0 0 / 38%),
+      0 0 34px rgb(217 25 201 / 15%);
+    opacity: 1;
+    transform: scale(0.985) translateY(-6px);
+  }
+
+  app-testimonials-carousel .review-card--highlighted:hover {
+    transform: scale(1.03) translateY(-11px);
+  }
+
+  app-testimonials-carousel .review-card:hover .reviewer-avatar {
+    box-shadow:
+      0 12px 28px rgb(188 39 123 / 34%),
+      0 0 0 4px rgb(217 25 201 / 8%);
+    transform: scale(1.045);
+  }
+
+  app-testimonials-carousel .review-card:hover .quote-mark {
+    color: rgb(188 39 123 / 19%);
+    opacity: 1;
+    transform: translate3d(-3px, 2px, 0) rotate(-2deg);
+  }
+
+  app-testimonials-carousel .review-card:hover .stars {
+    color: #df4724;
+    text-shadow: 0 0 18px rgb(225 92 50 / 24%);
+    transform: translateX(2px);
+  }
+
+  app-testimonials-carousel .reviews-link:hover {
+    color: #ffd1f4;
+    text-decoration-color: #ff895d;
+  }
+
+  app-testimonials-carousel .reviews-link:hover span {
+    transform: translate3d(3px, -3px, 0);
+  }
+
   app-testimonials-carousel
     :is(.carousel-button, .autoplay-button):is(:hover, :focus-visible):not(:disabled) {
     border-color: rgb(255 255 255 / 42%);
@@ -457,11 +666,35 @@ app-testimonials-carousel :is(.carousel-button, .autoplay-button, .carousel-indi
     padding: var(--space-10) 0;
   }
 
+  app-hero .hero::before,
+  app-hero .hero-copy > *,
+  app-hero .photo {
+    animation: none;
+  }
+
+  app-hero .hero::before {
+    transform: none;
+  }
+
+  app-hero .hero-copy > *,
+  app-hero .photo {
+    opacity: 1;
+  }
+
   body:has(.contact input:focus, .contact select:focus, .contact textarea:focus) .whatsapp-button {
     visibility: hidden;
     opacity: 0;
     pointer-events: none;
     transform: translateY(12px);
+  }
+
+  app-hero .brand-seal::after {
+    display: none;
+  }
+
+  app-hero .brand-seal {
+    background-position: 50% 50%;
+    animation: none;
   }
 }
 
@@ -493,6 +726,11 @@ app-testimonials-carousel :is(.carousel-button, .autoplay-button, .carousel-indi
     --pointer-shift-y: 0px !important;
   }
 
+  .animated-gradient-title {
+    animation: none !important;
+    background-position: 50% 50% !important;
+  }
+
   app-hero .hero::before,
   app-hero .hero-copy > *,
   app-hero .photo,
@@ -503,6 +741,11 @@ app-testimonials-carousel :is(.carousel-button, .autoplay-button, .carousel-indi
     animation: none !important;
   }
 
+  app-hero .brand-seal::after {
+    opacity: 0 !important;
+    transform: none !important;
+  }
+
   app-testimonials-carousel .reviews::before,
   app-testimonials-carousel .reviews::after {
     animation: none !important;
@@ -510,6 +753,19 @@ app-testimonials-carousel :is(.carousel-button, .autoplay-button, .carousel-indi
   }
 
   app-testimonials-carousel :is(.carousel-button, .autoplay-button, .carousel-indicators button) {
+    transform: none !important;
+  }
+
+  app-testimonials-carousel
+    :is(
+      .proof-list,
+      .proof-list li,
+      .review-card,
+      .reviewer-avatar,
+      .quote-mark,
+      .stars,
+      .reviews-link span
+    ) {
     transform: none !important;
   }
 
@@ -529,5 +785,13 @@ app-testimonials-carousel :is(.carousel-button, .autoplay-button, .carousel-indi
   }
   app-hero .hero-media {
     transform: none !important;
+  }
+}
+
+@media (forced-colors: active) {
+  .animated-gradient-title {
+    background: none;
+    color: CanvasText;
+    animation: none;
   }
 }

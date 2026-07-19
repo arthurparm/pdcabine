@@ -43,6 +43,27 @@ describe('App', () => {
     expect(page.querySelector('.submit-button')?.classList).not.toContain('button--light');
   });
 
+  it('applies the reusable animated gradient to visible headings and the spotlight emphasis', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+    const page = fixture.nativeElement as HTMLElement;
+    const visibleSectionTitles = [...page.querySelectorAll<HTMLHeadingElement>('h2:not(.sr-only)')];
+
+    expect(visibleSectionTitles).toHaveLength(7);
+    expect(
+      visibleSectionTitles
+        .filter((title) => title.id !== 'spotlight-title')
+        .every((title) => title.classList.contains('animated-gradient-title')),
+    ).toBe(true);
+    expect(
+      page.querySelector('#spotlight-title .animated-gradient-title--pink')?.textContent,
+    ).toContain('Mais do que uma foto.');
+    expect(page.querySelector('#spotlight-title')?.classList).not.toContain(
+      'animated-gradient-title',
+    );
+    expect(page.querySelector('#proof-title')?.classList).not.toContain('animated-gradient-title');
+  });
+
   it('opens and closes the responsive navigation state', async () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
